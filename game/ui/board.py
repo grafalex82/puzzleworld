@@ -17,6 +17,7 @@ from game.ui.renderer import PuzzleRenderer
 
 class GameBoardWidget(QWidget):
     turn_requested = pyqtSignal(int, object)
+    turn_shortcut_requested = pyqtSignal(int, object)
     busy_changed = pyqtSignal(bool)
     transition_finished = pyqtSignal(object)
 
@@ -147,7 +148,7 @@ class GameBoardWidget(QWidget):
             Qt.Key.Key_E: 2,
         }
         circle = circles_by_key.get(event.key())
-        if not self.busy and circle is not None and event.modifiers() in (
+        if circle is not None and event.modifiers() in (
             Qt.KeyboardModifier.NoModifier,
             Qt.KeyboardModifier.ShiftModifier,
         ):
@@ -156,7 +157,7 @@ class GameBoardWidget(QWidget):
                 if event.modifiers() == Qt.KeyboardModifier.ShiftModifier
                 else TurnDirection.CLOCKWISE
             )
-            self.turn_requested.emit(circle, direction)
+            self.turn_shortcut_requested.emit(circle, direction)
             event.accept()
             return
         if event.key() == Qt.Key.Key_Escape:

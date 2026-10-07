@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import deque
 import random
 from pathlib import Path
 
@@ -24,6 +25,7 @@ class GameWindow(QMainWindow):
         self.session = session or GameSession()
         self._current_file: Path | None = None
         self._pending_victory: MoveTransition | None = None
+        self._queued_shortcut_turns: deque[tuple[int, TurnDirection]] = deque()
         settings = load_settings()
         self.board = GameBoardWidget(
             get_renderer(self.session.puzzle.puzzle_id), self.session.board, settings.animation_duration_ms
@@ -35,6 +37,7 @@ class GameWindow(QMainWindow):
         self._create_menus()
         self._create_status_bar()
         self.board.turn_requested.connect(self._perform_turn)
+        self.board.turn_shortcut_requested.connect(self._perform_shortcut_turn)
         self.board.busy_changed.connect(self._on_busy_changed)
         self.board.transition_finished.connect(self._on_transition_finished)
         self._refresh_ui()
@@ -171,6 +174,13 @@ class GameWindow(QMainWindow):
         self._refresh_ui()
 
 
+    def _perform_shortcut_turn(self, circle: int, direction: TurnDirection) -> None:
+        if self.board.busy:
+            self._queued_shortcut_turns.append((circle, direction))
+            return
+        self._perform_turn(circle, direction)
+
+
     def _undo(self) -> None:
         if self.board.busy:
             return
@@ -196,6 +206,7 @@ class GameWindow(QMainWindow):
         seed = random.SystemRandom().randrange(0, 2**63)
         commands = self.session.scramble(difficulty, seed)
         self.board.cancel_transients()
+        self._queued_shortcut_turns.clear()
         self.board.set_state(self.session.board)
         self.board.show_message(
             self.tr("%1 scramble · %2 turns")
@@ -215,6 +226,7 @@ class GameWindow(QMainWindow):
         self.session.mark_saved()
         self._current_file = None
         self.board.cancel_transients()
+        self._queued_shortcut_turns.clear()
         self.board.set_state(self.session.board)
         self.board.show_message(self.tr("Free play · solved board"))
         self._refresh_ui()
@@ -245,6 +257,7 @@ class GameWindow(QMainWindow):
             )
             return
         self._current_file = path
+        self._queued_shortcut_turns.clear()
         self.board.set_renderer(get_renderer(self.session.puzzle.puzzle_id), self.session.board)
         self.board.show_message(self.tr("Game loaded"))
         self.statusBar().showMessage(self.tr("Opened %1").replace("%1", path.name), 3000)
@@ -326,7 +339,11 @@ class GameWindow(QMainWindow):
         self._refresh_ui()
         if self._pending_victory is transition:
             self._pending_victory = None
+            self._queued_shortcut_turns.clear()
             self._show_victory()
+        elif self._queued_shortcut_turns:
+            circle, direction = self._queued_shortcut_turns.popleft()
+            self._perform_turn(circle, direction)
 
 
     def _show_victory(self) -> None:

@@ -7,7 +7,7 @@ from PyQt6.QtTest import QSignalSpy, QTest
 from PyQt6.QtWidgets import QApplication
 
 from game.application.session import GameSession
-from game.domain.moves import TurnDirection
+from game.domain.moves import TurnCommand, TurnDirection
 from game.domain.state import ColorId
 from game.puzzles.looper.renderer import PIECE_PALETTE, LooperGeometry
 from game.ui.board import GameBoardWidget
@@ -77,6 +77,28 @@ def test_turn_shortcuts_map_keys_to_circles_and_directions():
         assert command.direction is direction
         window.board.cancel_transients()
 
+    window.session.mark_saved()
+    window.close()
+
+
+def test_turn_shortcuts_are_queued_while_animation_runs():
+    window = GameWindow(GameSession())
+
+    window.show()
+    window.board.setFocus()
+    QTest.keyClick(window.board, Qt.Key.Key_Q)
+    QTest.keyClick(window.board, Qt.Key.Key_W, Qt.KeyboardModifier.ShiftModifier)
+
+    assert window.session.history.commands == (
+        TurnCommand("looper", 0, TurnDirection.CLOCKWISE),
+    )
+
+    QTest.qWait(600)
+
+    assert window.session.history.commands == (
+        TurnCommand("looper", 0, TurnDirection.CLOCKWISE),
+        TurnCommand("looper", 1, TurnDirection.COUNTERCLOCKWISE),
+    )
     window.session.mark_saved()
     window.close()
 
