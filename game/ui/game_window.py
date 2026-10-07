@@ -6,6 +6,7 @@ from collections import deque
 import random
 from pathlib import Path
 
+from PyQt6.QtCore import QTimer
 from PyQt6.QtGui import QAction, QActionGroup, QCloseEvent, QKeySequence
 from PyQt6.QtWidgets import QFileDialog, QLabel, QMainWindow, QMessageBox
 
@@ -340,7 +341,10 @@ class GameWindow(QMainWindow):
         if self._pending_victory is transition:
             self._pending_victory = None
             self._queued_shortcut_turns.clear()
-            self._show_victory()
+            # A victory dialog can start a new game. Defer it until the animation
+            # completion signal has fully unwound so its first turn starts from a
+            # clean animation lifecycle.
+            QTimer.singleShot(0, self._show_victory)
         elif self._queued_shortcut_turns:
             circle, direction = self._queued_shortcut_turns.popleft()
             self._perform_turn(circle, direction)
