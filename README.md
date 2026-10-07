@@ -1,0 +1,65 @@
+# Puzzle World
+
+Desktop collection of flat mechanical puzzles. The first implemented puzzle is **Looper**; the application architecture reserves independent domain and renderer modules for future Super Looper and Hyper Looper variants.
+
+## Install
+
+```text
+python -m pip install -r requirements.txt
+```
+
+## Run
+
+```text
+python -m game
+```
+
+## Test
+
+```text
+pytest
+```
+
+## Main modes
+
+- **Free play** starts with a solved board. Moves are not counted and solving the puzzle does not end the session. Use this mode to study the mechanism and test move sequences.
+- **Solving** starts after a reproducible scramble. Manual moves and redo increase the move counter, undo decreases it, and returning to the solved state completes the game.
+
+## Repository structure
+
+```text
+docs/                       Design rules and the versioned save format
+game/
+├── domain/                 Shared immutable domain values and rule protocols
+├── puzzles/
+│   ├── looper/             Looper model and its independent Qt renderer
+│   └── registry.py         Implemented and planned puzzle registry
+├── application/            Sessions, game modes, history, and scrambles
+├── input/                  Input-to-command translation without puzzle rules
+├── persistence/            JSON saves, board codecs, and application settings
+└── ui/                     Main window, board widget, camera, and animation
+tests/                      Domain, application, persistence, input, and UI tests
+requirements.txt            Runtime and test dependencies
+pytest.ini                  Test discovery and repository-local test settings
+```
+
+New puzzle families belong in `game/puzzles/<puzzle_id>/`. Each puzzle owns its model and renderer while the session, history, save envelope, and main window remain puzzle-independent.
+
+## Code style
+
+- Use a maximum line length of 110 characters.
+- Wrap a line only when it would exceed 110 characters; do not add shorter cosmetic wraps.
+- Leave two empty lines between function definitions and between method definitions.
+- Keep filenames, identifiers, comments, and documentation in English.
+
+## Controls
+
+- Left click a highlighted circle to turn it counter-clockwise by 180 degrees.
+- Right click a highlighted circle to turn it clockwise. Looper is a half-turn puzzle, so both directions currently have the same logical result.
+- The board automatically fits the window and resizes with it.
+- `Q`, `W`, and `E` turn circles 1, 2, and 3 clockwise; hold `Shift` to turn the corresponding circle counter-clockwise.
+- `Ctrl+Z` / `Ctrl+Y` undo and redo; `Ctrl+Shift+Z` is an alternate redo shortcut.
+- `Ctrl+O` opens a JSON save and `Ctrl+S` saves it.
+- `Escape` clears transient selection or messages and never exits the application.
+
+See [docs/DESIGN.md](docs/DESIGN.md) for rules and architecture, and [docs/SAVE_FORMAT.md](docs/SAVE_FORMAT.md) for the save format.
