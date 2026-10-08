@@ -4,11 +4,35 @@ Puzzle World is a desktop application for playing a growing collection of flat m
 
 ## Puzzles
 
-- **Looper** — three overlapping circles containing lens and vertical elements. A turn rotates the five elements inside one circle by 180 degrees.
-- **Super Looper** — a Looper modification with deeper cuts and more elements, adding oriented vertical and paired diamond pieces.
-- **Hyper Looper** — a further modification with deeper cuts and even more elements: oriented lenses and large paired diamonds, unoriented vertical and small paired diamonds, and a light-gray final lens.
-- **TriLotica** — two circles one radius apart: the left disk cycles three lenses and three curved triangles by 120 degrees, while the right disk swaps two three-piece sets with a half-turn.
-- **Lotica** — two circles one radius apart: the left disk cycles four lenses and four curved triangles by 90 degrees, while the right disk swaps two lens-and-triangle sets with a half-turn.
+### Looper
+
+Three overlapping circles containing lens and vertical elements. A turn rotates the five elements inside one circle by 180 degrees.
+
+![Solved Looper puzzle](docs/screenshots/looper.png)
+
+### Super Looper
+
+A Looper modification with deeper cuts and more elements, adding oriented vertical and paired diamond pieces.
+
+![Solved Super Looper puzzle](docs/screenshots/super-looper.png)
+
+### Hyper Looper
+
+A further modification with deeper cuts and even more elements: oriented lenses and large paired diamonds, unoriented vertical and small paired diamonds, and a light-gray final lens.
+
+![Solved Hyper Looper puzzle](docs/screenshots/hyper-looper.png)
+
+### TriLotica
+
+Two circles one radius apart: the left disk cycles three lenses and three curved triangles by 120 degrees, while the right disk swaps two three-piece sets with a half-turn.
+
+![Solved TriLotica puzzle](docs/screenshots/trilotica.png)
+
+### Lotica
+
+Two circles one radius apart: the left disk cycles four lenses and four curved triangles by 90 degrees, while the right disk swaps two lens-and-triangle sets with a half-turn.
+
+![Solved Lotica puzzle](docs/screenshots/lotica.png)
 
 ## Install
 
