@@ -8,33 +8,19 @@ from PyQt6.QtCore import QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 
 from game.application.session import MoveTransition
-from game.domain.state import BoardState, ColorId, Orientation, Piece
-
-FRAME_BORDER_COLOR = "#34383d"
-FRAME_FILL_COLOR = "#111315"
-PLAY_AREA_COLOR = "#090a0b"
-EMPTY_PIECE_COLOR = "#9aa1a7"
-HOVER_OUTLINE_COLOR = "#58c9ff"
-ORIENTATION_MARKER_BORDER_COLOR = "#303438"
-ORIENTATION_MARKER_FILL_COLOR = "#1a1d20"
-TRANSPARENT_COLOR = QColor(0, 0, 0, 0)
-
-PIECE_PALETTE = {
-    ColorId.RED: "#e53935",
-    ColorId.ORANGE: "#ff6d00",
-    ColorId.YELLOW: "#fdd835",
-    ColorId.GREEN: "#23b26d",
-    ColorId.BLUE: "#2196f3",
-    ColorId.PURPLE: "#8e44ad",
-    ColorId.GRAY: "#8d949a",
-}
-
-
-def _circle_path(center_x: float, radius: float) -> QPainterPath:
-    """Create a circular path centered on the horizontal axis."""
-    path = QPainterPath()
-    path.addEllipse(QPointF(center_x, 0.0), radius, radius)
-    return path
+from game.domain.state import BoardState, Orientation, Piece
+from game.puzzles.colors import (
+    EMPTY_PIECE_COLOR,
+    FRAME_BORDER_COLOR,
+    FRAME_FILL_COLOR,
+    HOVER_OUTLINE_COLOR,
+    ORIENTATION_MARKER_BORDER_COLOR,
+    ORIENTATION_MARKER_FILL_COLOR,
+    PIECE_PALETTE,
+    PLAY_AREA_COLOR,
+    TRANSPARENT_COLOR,
+)
+from game.puzzles.geometry import circle_path
 
 
 class LooperGeometry:
@@ -49,7 +35,7 @@ class LooperGeometry:
 
     def __init__(self) -> None:
         """Build the reusable paths that define the Looper board."""
-        self.circles = tuple(_circle_path(center, self.radius) for center in self.circle_centers)
+        self.circles = tuple(circle_path(center, self.radius) for center in self.circle_centers)
         self.play_area = self.circles[0].united(self.circles[1]).united(self.circles[2])
         self.small_paths = tuple(self._make_small_path(center) for center in self.small_centers)
         self.large_paths = tuple(self._make_large_path(center) for center in self.large_centers)
@@ -67,16 +53,16 @@ class LooperGeometry:
 
     def _make_small_path(self, center: float) -> QPainterPath:
         """Build the lens-shaped path for a small piece."""
-        left = _circle_path(center - self.center_step, self.radius)
-        right = _circle_path(center + self.center_step, self.radius)
+        left = circle_path(center - self.center_step, self.radius)
+        right = circle_path(center + self.center_step, self.radius)
         return left.intersected(right)
 
 
     def _make_large_path(self, center: float) -> QPainterPath:
         """Build the larger lens path with overlapping small pieces removed."""
         half_step = self.center_step / 2
-        left_circle = _circle_path(center - half_step, self.radius)
-        right_circle = _circle_path(center + half_step, self.radius)
+        left_circle = circle_path(center - half_step, self.radius)
+        right_circle = circle_path(center + half_step, self.radius)
         lens = left_circle.intersected(right_circle)
         index = self.large_centers.index(center)
         side_lenses = self.small_paths[index].united(self.small_paths[index + 1])
@@ -87,8 +73,8 @@ class LooperGeometry:
         """Split the unoccupied area of a circle into top and bottom paths."""
         center = self.circle_centers[circle]
         disk = self.circles[circle]
-        left_neighbor = _circle_path(center - self.center_step, self.radius)
-        right_neighbor = _circle_path(center + self.center_step, self.radius)
+        left_neighbor = circle_path(center - self.center_step, self.radius)
+        right_neighbor = circle_path(center + self.center_step, self.radius)
         colored_lenses = disk.intersected(left_neighbor).united(disk.intersected(right_neighbor))
         gray = disk.subtracted(colored_lenses)
 

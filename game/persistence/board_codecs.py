@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from game.domain.rules import PuzzleDefinition
 from game.domain.state import BoardState, ColorId, Orientation, Piece
 from game.puzzles.registry import get_puzzle
 
@@ -46,7 +47,7 @@ def decode_board(puzzle_id: str, data: Any) -> BoardState:
     if not isinstance(pieces_data, list):
         raise BoardCodecError("board.pieces must be an array.")
 
-    board = _decode_compact_board(puzzle.solved_state(), pieces_data)
+    board = _decode_compact_board(puzzle, pieces_data)
 
     try:
         puzzle.validate_state(board)
@@ -55,7 +56,8 @@ def decode_board(puzzle_id: str, data: Any) -> BoardState:
     return board
 
 
-def _decode_compact_board(solved: BoardState, pieces_data: list[Any]) -> BoardState:
+def _decode_compact_board(puzzle: PuzzleDefinition, pieces_data: list[Any]) -> BoardState:
+    solved = puzzle.solved_state()
     if len(pieces_data) != len(solved.pieces):
         raise BoardCodecError(f"board.pieces must contain exactly {len(solved.pieces)} items.")
 
@@ -70,12 +72,10 @@ def _decode_compact_board(solved: BoardState, pieces_data: list[Any]) -> BoardSt
             raise BoardCodecError(f"Piece {index} has an unknown color identifier.") from error
         orientation = _decode_orientation(item["orientation"], index)
 
-        # Slot geometry is invariant for Looper: zero-based even slots are small
-        # and odd slots are large (equivalently, 1-based odd/even positions).
         candidates = [
             piece
             for slot, piece in enumerate(solved.pieces)
-            if slot % 2 == index % 2 and piece.color_id is color_id
+            if puzzle.slot_kind(slot) == puzzle.slot_kind(index) and piece.color_id is color_id
         ]
         if len(candidates) != 1:
             raise BoardCodecError(f"Piece {index} color is not valid for its slot.")

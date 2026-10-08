@@ -17,6 +17,10 @@ class PuzzleDefinition(Protocol):
     display_name: str
     circle_count: int
 
+    def slot_kind(self, slot: int) -> str:
+        """Return the stable geometric kind for a board slot."""
+        ...
+
     def solved_state(self) -> BoardState:
         """Return the canonical solved board state."""
         ...

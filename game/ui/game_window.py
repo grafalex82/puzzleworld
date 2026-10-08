@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-from collections import deque
 import random
+from collections import deque
+from dataclasses import replace
 from pathlib import Path
 
 from PyQt6.QtCore import QTimer
@@ -13,8 +14,14 @@ from PyQt6.QtWidgets import QFileDialog, QLabel, QMainWindow, QMessageBox
 from game.application.scramble import ScrambleDifficulty
 from game.application.session import GameMode, GameSession, MoveTransition
 from game.domain.moves import TurnDirection
-from game.persistence.game_state import GameState, LoadError, SaveError, load_game, save_game
-from game.persistence.settings import load_settings
+from game.persistence.game_state import (
+    GameState,
+    LoadError,
+    SaveError,
+    load_game,
+    save_game,
+)
+from game.persistence.settings import load_settings, save_settings
 from game.puzzles.registry import available_puzzles
 from game.ui.board import GameBoardWidget
 from game.ui.renderer import get_renderer
@@ -23,13 +30,13 @@ from game.ui.renderer import get_renderer
 class GameWindow(QMainWindow):
     def __init__(self, session: GameSession | None = None) -> None:
         super().__init__()
-        self.session = session or GameSession()
+        self._settings = load_settings()
+        self.session = session or GameSession(self._settings.puzzle_id)
         self._current_file: Path | None = None
         self._pending_victory: MoveTransition | None = None
         self._queued_shortcut_turns: deque[tuple[int, TurnDirection]] = deque()
-        settings = load_settings()
         self.board = GameBoardWidget(
-            get_renderer(self.session.puzzle.puzzle_id), self.session.board, settings.animation_duration_ms
+            get_renderer(self.session.puzzle.puzzle_id), self.session.board, self._settings.animation_duration_ms
         )
         self.setCentralWidget(self.board)
         self.setMinimumSize(800, 500)
@@ -103,6 +110,10 @@ class GameWindow(QMainWindow):
             self.tr("About"), self._show_about, tip=self.tr("About Puzzle World")
         )
         self.scramble_actions: dict[QAction, ScrambleDifficulty] = {}
+        self.puzzle_actions: dict[QAction, str] = {}
+        self._implemented_puzzle_ids = {
+            descriptor.puzzle_id for descriptor in available_puzzles() if descriptor.implemented
+        }
         for difficulty in ScrambleDifficulty:
             label = {
                 ScrambleDifficulty.EASY: self.tr("Easy — 6 turns"),
@@ -148,8 +159,12 @@ class GameWindow(QMainWindow):
                 if descriptor.implemented
                 else self.tr("Planned for a future version")
             )
+            action.triggered.connect(
+                lambda checked=False, puzzle_id=descriptor.puzzle_id: self._select_puzzle(puzzle_id)
+            )
             variants.addAction(action)
             variants_menu.addAction(action)
+            self.puzzle_actions[action] = descriptor.puzzle_id
 
         help_menu = self.menuBar().addMenu(self.tr("&Help"))
         help_menu.addAction(self.controls_action)
@@ -233,6 +248,25 @@ class GameWindow(QMainWindow):
         self._refresh_ui()
 
 
+    def _select_puzzle(self, puzzle_id: str) -> None:
+        """Switch puzzle family while keeping window and session mechanics shared."""
+        if puzzle_id == self.session.puzzle.puzzle_id:
+            return
+        if puzzle_id not in self._implemented_puzzle_ids:
+            return
+        if not self._confirm_loss(self.tr("change puzzle type")):
+            self._refresh_ui()
+            return
+        self.session.replace_puzzle(puzzle_id)
+        self._current_file = None
+        self.board.cancel_transients()
+        self._queued_shortcut_turns.clear()
+        self.board.set_renderer(get_renderer(puzzle_id), self.session.board)
+        self._save_selected_puzzle(puzzle_id)
+        self.board.show_message(self.tr("Free play · %1").replace("%1", self.session.puzzle.display_name))
+        self._refresh_ui()
+
+
     def _open_game(self) -> None:
         if not self._confirm_loss(self.tr("open another game")):
             return
@@ -260,6 +294,7 @@ class GameWindow(QMainWindow):
         self._current_file = path
         self._queued_shortcut_turns.clear()
         self.board.set_renderer(get_renderer(self.session.puzzle.puzzle_id), self.session.board)
+        self._save_selected_puzzle(self.session.puzzle.puzzle_id)
         self.board.show_message(self.tr("Game loaded"))
         self.statusBar().showMessage(self.tr("Opened %1").replace("%1", path.name), 3000)
         self._refresh_ui()
@@ -272,7 +307,7 @@ class GameWindow(QMainWindow):
 
 
     def _save_game_as(self) -> bool:
-        default = self._current_file or (Path.cwd() / "looper-save.json")
+        default = self._current_file or (Path.cwd() / f"{self.session.puzzle.puzzle_id}-save.json")
         filename, _ = QFileDialog.getSaveFileName(
             self, self.tr("Save game"), str(default), self.tr("Puzzle World saves (*.json);;All files (*)")
         )
@@ -303,6 +338,12 @@ class GameWindow(QMainWindow):
         self.statusBar().showMessage(self.tr("Saved %1").replace("%1", path.name), 3000)
         self._refresh_ui()
         return True
+
+
+    def _save_selected_puzzle(self, puzzle_id: str) -> None:
+        """Persist the active puzzle choice without changing other preferences."""
+        self._settings = replace(self._settings, puzzle_id=puzzle_id)
+        save_settings(self._settings)
 
 
     def _confirm_loss(self, operation: str) -> bool:
@@ -387,7 +428,7 @@ class GameWindow(QMainWindow):
             self.tr("About Puzzle World"),
             self.tr(
                 "Puzzle World\n\nA desktop collection of colorful mechanical puzzles.\n"
-                "This version includes Looper."
+                "This version includes Looper and Super Looper."
             ),
         )
 
@@ -402,6 +443,9 @@ class GameWindow(QMainWindow):
         self.save_as_action.setEnabled(not busy)
         for action in self.scramble_actions:
             action.setEnabled(not busy)
+        for action, puzzle_id in self.puzzle_actions.items():
+            action.setEnabled(not busy and puzzle_id in self._implemented_puzzle_ids)
+            action.setChecked(puzzle_id == self.session.puzzle.puzzle_id)
         mode_text = self.tr("Solving") if self.session.mode is GameMode.SOLVING else self.tr("Free play")
         self._mode_label.setText(self.tr("Mode: %1").replace("%1", mode_text))
         moves = str(self.session.move_count) if self.session.mode is GameMode.SOLVING else "—"

@@ -5,10 +5,11 @@ from __future__ import annotations
 from game.domain.rules import PuzzleDefinition
 from game.puzzles.base import PuzzleDescriptor
 from game.puzzles.looper.model import LOOPER
+from game.puzzles.super_looper.model import SUPER_LOOPER
 
 _DESCRIPTORS = (
     PuzzleDescriptor("looper", "Looper", True, LOOPER),
-    PuzzleDescriptor("super-looper", "Super Looper", False),
+    PuzzleDescriptor("super-looper", "Super Looper", True, SUPER_LOOPER),
     PuzzleDescriptor("hyper-looper", "Hyper Looper", False),
 )
 

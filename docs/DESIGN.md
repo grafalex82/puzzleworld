@@ -20,6 +20,12 @@ The gray triangular gaps shown in the physical puzzle are decorative. They can p
 
 The Looper renderer derives every boundary from equal circles of radius `R`. Adjacent movable-circle centers are separated by `0.8R`, which is 40 percent of the diameter. A small piece is the intersection of circles separated by `1.6R`. A large piece is an adjacent-circle intersection with its two small side lenses removed. The remaining top and bottom regions complete each movable circle as two gray pieces. Consequently, each animated circle is exactly tiled by three small pieces, two large pieces, and two gray pieces; their rigid rotation is clipped to that circle.
 
+## Super Looper rules
+
+Super Looper also has three circles, but adjacent movable-circle centers are separated by `0.56R`, or 28 percent of a circle diameter. Its board has 15 logical colored pieces. A lens is the intersection of circles separated by three basic offsets. An oriented vertical piece is an intersection separated by two offsets with the two neighboring lenses removed. A diamond is a single logical piece drawn as an inseparable upper/lower pair: it starts as an intersection separated by one offset and has three lenses and two vertical pieces removed.
+
+Each circle rotates four lenses, three vertical pieces, and two diamonds. The two gray triangular remnants are renderer-only paths that rotate with their circle. A 180-degree turn reverses that circle's nine logical positions atomically and flips only vertical-piece orientation.
+
 ## Domain invariants
 
 1. States and commands are immutable.
@@ -52,7 +58,7 @@ game/persistence        validated versioned JSON and separate app settings
 game/ui                 Qt windows, camera, hit testing, rendering, animation
 ```
 
-The puzzle registry resolves a stable `puzzle_id` to a domain definition. The renderer registry independently resolves the same id to a renderer. Adding Super Looper therefore requires a new model module, renderer module, registry entries, and focused tests; `GameSession`, history, persistence envelope, and `GameWindow` do not change.
+The puzzle registry resolves a stable `puzzle_id` to a domain definition. The renderer registry independently resolves the same id to a renderer. Looper and Super Looper use these extension points; their model and renderer files remain puzzle-specific while `GameSession`, history, persistence envelope, and `GameWindow` stay shared.
 
 The domain imports no Qt, filesystem, clock, or rendering module. Persistence can convert a session snapshot to JSON, but filesystem I/O never occurs in the session. UI invokes public session methods and consumes returned transitions; it never mutates pieces or arrays.
 

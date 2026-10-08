@@ -37,6 +37,13 @@ class LooperPuzzle:
         return not cls.is_small_piece(slot)
 
 
+    def slot_kind(self, slot: int) -> str:
+        """Return the stable shape family of a Looper board slot."""
+        if not 0 <= slot < len(self._specs):
+            raise DomainError("Looper slot index is out of range.")
+        return "small" if self.is_small_piece(slot) else "large"
+
+
     def solved_state(self) -> BoardState:
         """Build the canonical Looper arrangement."""
         return BoardState(

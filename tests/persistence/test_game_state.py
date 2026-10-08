@@ -5,7 +5,13 @@ import pytest
 
 from game.application.scramble import ScrambleDifficulty
 from game.application.session import GameMode, GameSession
-from game.persistence.game_state import GameState, LoadError, SaveError, load_game, save_game
+from game.persistence.game_state import (
+    GameState,
+    LoadError,
+    SaveError,
+    load_game,
+    save_game,
+)
 
 
 def test_save_load_round_trip_restores_mode_count_and_board(tmp_path):
@@ -48,6 +54,18 @@ def test_save_omits_scramble_metadata(tmp_path):
     data = json.loads(target.read_text(encoding="utf-8"))
 
     assert "scramble" not in data
+
+
+def test_super_looper_save_round_trip_preserves_compound_piece_positions(tmp_path):
+    session = GameSession("super-looper")
+    session.perform_turn(1)
+    target = tmp_path / "super-looper.json"
+
+    save_game(target, GameState.from_snapshot(session.snapshot()))
+    loaded = load_game(target)
+
+    assert loaded.puzzle_id == "super-looper"
+    assert loaded.board == session.board
 
 
 def test_compact_save_rejects_duplicate_piece_identity(tmp_path):

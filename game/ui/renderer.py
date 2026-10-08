@@ -32,4 +32,8 @@ def get_renderer(puzzle_id: str) -> PuzzleRenderer:
         from game.puzzles.looper.renderer import LooperRenderer
 
         return LooperRenderer()
+    if puzzle_id == "super-looper":
+        from game.puzzles.super_looper.renderer import SuperLooperRenderer
+
+        return SuperLooperRenderer()
     raise KeyError(f"No renderer is registered for puzzle: {puzzle_id}")

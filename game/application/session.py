@@ -131,6 +131,18 @@ class GameSession:
         self._dirty = True
 
 
+    def replace_puzzle(self, puzzle_id: str) -> None:
+        """Switch to another puzzle family and start its solved free-play board."""
+        self._puzzle = get_puzzle(puzzle_id)
+        self._board = self._puzzle.solved_state()
+        self._mode = GameMode.FREE_PLAY
+        self._solving_active = False
+        self._move_count = 0
+        self._final_move_count = None
+        self._history.clear()
+        self._dirty = True
+
+
     def continue_free_play(self) -> None:
         self._mode = GameMode.FREE_PLAY
         self._solving_active = False

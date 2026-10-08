@@ -10,6 +10,7 @@ from game.application.session import GameSession
 from game.domain.moves import TurnCommand, TurnDirection
 from game.domain.state import ColorId
 from game.puzzles.looper.renderer import PIECE_PALETTE, LooperGeometry
+from game.puzzles.super_looper.renderer import SuperLooperGeometry
 from game.ui.board import GameBoardWidget
 from game.ui.game_window import GameWindow
 from game.ui.renderer import get_renderer
@@ -123,5 +124,26 @@ def test_each_circle_is_exactly_seven_synchronous_element_paths():
             covered = covered.united(member)
 
         assert len(members) == 7
+        assert disk.subtracted(covered).isEmpty()
+        assert covered.subtracted(disk).isEmpty()
+
+
+def test_super_looper_geometry_uses_twenty_eight_percent_diameter_step():
+    geometry = SuperLooperGeometry()
+
+    assert geometry.basic_step / (geometry.radius * 2) == 0.28
+
+
+def test_each_super_looper_circle_is_tiled_by_nine_pieces_and_two_gray_triangles():
+    geometry = SuperLooperGeometry()
+
+    for circle, disk in enumerate(geometry.circles):
+        members = geometry.circle_member_paths(circle)
+        covered = members[0]
+        for member in members[1:]:
+            covered = covered.united(member)
+
+        assert len(members) == 11
+        assert len(geometry.gray_paths[circle]) == 2
         assert disk.subtracted(covered).isEmpty()
         assert covered.subtracted(disk).isEmpty()
