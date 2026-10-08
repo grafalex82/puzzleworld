@@ -18,7 +18,7 @@ class FakeQSettings:
         self.values[key] = value
 
 
-def test_settings_persist_the_last_implemented_puzzle(monkeypatch):
+def test_settings_persist_the_last_selected_puzzle(monkeypatch):
     FakeQSettings.values = {}
     monkeypatch.setattr(settings, "QSettings", FakeQSettings)
 
@@ -27,8 +27,8 @@ def test_settings_persist_the_last_implemented_puzzle(monkeypatch):
     assert settings.load_settings() == settings.AppSettings(360, "super-looper")
 
 
-def test_settings_fall_back_to_looper_when_the_saved_puzzle_is_unavailable(monkeypatch):
+def test_settings_restore_the_saved_hyper_looper_puzzle(monkeypatch):
     FakeQSettings.values = {"puzzle_id": "hyper-looper"}
     monkeypatch.setattr(settings, "QSettings", FakeQSettings)
 
-    assert settings.load_settings().puzzle_id == "looper"
+    assert settings.load_settings().puzzle_id == "hyper-looper"

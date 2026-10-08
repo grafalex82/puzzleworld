@@ -26,6 +26,14 @@ Super Looper also has three circles, but adjacent movable-circle centers are sep
 
 Each circle rotates four lenses, three vertical pieces, and two diamonds. The two gray triangular remnants are renderer-only paths that rotate with their circle. A 180-degree turn reverses that circle's nine logical positions atomically and flips only vertical-piece orientation.
 
+## Hyper Looper rules
+
+Hyper Looper has three circles offset by 22 percent of their diameter. Its 22 colored logical pieces comprise seven oriented lenses, six unoriented vertical pieces, five oriented large diamond pairs, and four unoriented small diamond pairs. The final lens is light gray. A large or small diamond always remains an inseparable upper/lower pair in the renderer and model.
+
+A lens is an intersection of circles separated by four basic offsets. A vertical is an intersection separated by three offsets with two lenses removed. A large diamond pair is an intersection separated by two offsets with three lenses and two verticals removed. A small diamond pair is an intersection separated by one offset with four lenses, three verticals, and two large diamond pairs removed.
+
+Each circle rotates five lenses, four verticals, three large diamonds, and two small diamonds. The two gray triangular remnants are renderer-only paths that rotate with the circle. A 180-degree turn atomically follows the geometric half-turn permutation and flips only the lens and large-diamond orientations.
+
 ## Domain invariants
 
 1. States and commands are immutable.

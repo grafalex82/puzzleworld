@@ -5,8 +5,8 @@ Puzzle World is a desktop application for playing a growing collection of flat m
 ## Puzzles
 
 - **Looper** — three overlapping circles containing lens and vertical elements. A turn rotates the five elements inside one circle by 180 degrees.
-- **Super Looper** — a denser Looper variant with circles offset by 28% of their diameter, adding lens, oriented vertical, and paired diamond elements.
-- **Hyper Looper** — planned for a future release; it is shown in the puzzle list but cannot yet be selected.
+- **Super Looper** — a Looper modification with deeper cuts and more elements, adding oriented vertical and paired diamond pieces.
+- **Hyper Looper** — a further modification with deeper cuts and even more elements: oriented lenses and large paired diamonds, unoriented vertical and small paired diamonds, and a light-gray final lens.
 
 ## Install
 
@@ -40,6 +40,7 @@ game/
 ├── puzzles/
 │   ├── looper/             Looper model and its independent Qt renderer
 │   ├── super_looper/       Super Looper model and its independent Qt renderer
+│   ├── hyper_looper/       Hyper Looper model and its independent Qt renderer
 │   └── registry.py         Implemented and planned puzzle registry
 ├── application/            Sessions, game modes, history, and scrambles
 ├── input/                  Input-to-command translation without puzzle rules

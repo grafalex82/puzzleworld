@@ -1,5 +1,5 @@
 """Looper puzzle implementation."""
 
-from game.puzzles.looper.model import LOOPER, LooperPuzzle
+from game.puzzles.looper.model import LooperPuzzle
 
-__all__ = ["LOOPER", "LooperPuzzle"]
+__all__ = ["LooperPuzzle"]

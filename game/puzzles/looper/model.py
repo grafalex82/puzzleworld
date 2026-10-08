@@ -97,6 +97,3 @@ class LooperPuzzle:
         """Return whether the state matches the canonical Looper arrangement."""
         self.validate_state(state)
         return state == self.solved_state()
-
-
-LOOPER = LooperPuzzle()

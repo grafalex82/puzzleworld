@@ -68,6 +68,18 @@ def test_super_looper_save_round_trip_preserves_compound_piece_positions(tmp_pat
     assert loaded.board == session.board
 
 
+def test_hyper_looper_save_round_trip_preserves_compound_piece_positions(tmp_path):
+    session = GameSession("hyper-looper")
+    session.perform_turn(1)
+    target = tmp_path / "hyper-looper.json"
+
+    save_game(target, GameState.from_snapshot(session.snapshot()))
+    loaded = load_game(target)
+
+    assert loaded.puzzle_id == "hyper-looper"
+    assert loaded.board == session.board
+
+
 def test_compact_save_rejects_duplicate_piece_identity(tmp_path):
     data = GameState.from_snapshot(GameSession().snapshot()).to_dict()
     data["board"]["pieces"][2]["color"] = data["board"]["pieces"][0]["color"]

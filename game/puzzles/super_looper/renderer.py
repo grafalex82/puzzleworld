@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import math
+from typing import TYPE_CHECKING
 
 from PyQt6.QtCore import QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 
-from game.application.session import MoveTransition
 from game.domain.state import BoardState, Orientation, Piece
 from game.puzzles.colors import (
     EMPTY_PIECE_COLOR,
@@ -21,7 +21,10 @@ from game.puzzles.colors import (
     TRANSPARENT_COLOR,
 )
 from game.puzzles.geometry import circle_path
-from game.puzzles.super_looper.model import SUPER_LOOPER
+from game.puzzles.super_looper.model import SuperLooperPuzzle
+
+if TYPE_CHECKING:
+    from game.application.session import MoveTransition
 
 
 class SuperLooperGeometry:
@@ -48,7 +51,7 @@ class SuperLooperGeometry:
         self.vertical_paths = tuple(self._make_vertical_path(center) for center in self.vertical_centers)
         self.diamond_paths = tuple(self._make_diamond_path(center) for center in self.diamond_centers)
 
-        paths: list[QPainterPath | None] = [None] * len(SUPER_LOOPER.solved_state().pieces)
+        paths: list[QPainterPath | None] = [None] * SuperLooperPuzzle.piece_count
         for slot, path in zip(self.lens_slots, self.lens_paths):
             paths[slot] = path
         for slot, path in zip(self.vertical_slots, self.vertical_paths):
@@ -61,7 +64,7 @@ class SuperLooperGeometry:
 
     def circle_member_paths(self, circle: int) -> tuple[QPainterPath, ...]:
         """Return the colored and decorative paths that rotate with one circle."""
-        slots = SUPER_LOOPER.circle_slots[circle]
+        slots = SuperLooperPuzzle.circle_slots[circle]
         return tuple(self.piece_paths[slot] for slot in slots) + self.gray_paths[circle]
 
 
@@ -101,7 +104,7 @@ class SuperLooperGeometry:
         """Split the non-model remainder of a circle into top and bottom triangles."""
         disk = self.circles[circle]
         colored = QPainterPath()
-        for slot in SUPER_LOOPER.circle_slots[circle]:
+        for slot in SuperLooperPuzzle.circle_slots[circle]:
             colored = colored.united(self.piece_paths[slot])
         gray = disk.subtracted(colored)
         center = self.circle_centers[circle]
@@ -148,7 +151,7 @@ class SuperLooperRenderer:
     ) -> None:
         self._draw_shell(painter)
         circle = transition.command.circle
-        affected = set(SUPER_LOOPER.circle_slots[circle])
+        affected = set(SuperLooperPuzzle.circle_slots[circle])
 
         for gray_circle, paths in enumerate(self.geometry.gray_paths):
             if gray_circle != circle:
@@ -165,7 +168,7 @@ class SuperLooperRenderer:
         painter.translate(center)
         painter.rotate(sign * 180.0 * progress)
         painter.translate(-center)
-        for slot in SUPER_LOOPER.circle_slots[circle]:
+        for slot in SuperLooperPuzzle.circle_slots[circle]:
             self._draw_piece(painter, transition.before.pieces[slot], slot)
         for path in self.geometry.gray_paths[circle]:
             self._draw_gray_piece(painter, path)

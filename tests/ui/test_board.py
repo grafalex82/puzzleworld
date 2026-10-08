@@ -1,5 +1,7 @@
 import os
 
+import pytest
+
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 from PyQt6.QtCore import QPointF, Qt
@@ -9,11 +11,12 @@ from PyQt6.QtWidgets import QApplication
 from game.application.session import GameSession
 from game.domain.moves import TurnCommand, TurnDirection
 from game.domain.state import ColorId
+from game.puzzles.hyper_looper.renderer import HyperLooperGeometry
 from game.puzzles.looper.renderer import PIECE_PALETTE, LooperGeometry
+from game.puzzles.registry import get_puzzle, get_renderer
 from game.puzzles.super_looper.renderer import SuperLooperGeometry
 from game.ui.board import GameBoardWidget
 from game.ui.game_window import GameWindow
-from game.ui.renderer import get_renderer
 
 _APP = QApplication.instance() or QApplication([])
 
@@ -40,6 +43,10 @@ def test_looper_renderer_hit_testing_selects_nearest_overlapping_circle():
     assert renderer.hit_test_circle(QPointF(left, 0.0)) == 0
     assert renderer.hit_test_circle(QPointF(middle, 0.0)) == 1
     assert renderer.hit_test_circle(QPointF(20_000.0, 20_000.0)) is None
+
+
+def test_renderer_registry_returns_the_same_renderer_instance_for_a_puzzle():
+    assert get_renderer("hyper-looper") is get_renderer("hyper-looper")
 
 
 def test_mouse_buttons_emit_requested_rotation_directions():
@@ -147,3 +154,46 @@ def test_each_super_looper_circle_is_tiled_by_nine_pieces_and_two_gray_triangles
         assert len(geometry.gray_paths[circle]) == 2
         assert disk.subtracted(covered).isEmpty()
         assert covered.subtracted(disk).isEmpty()
+
+
+def test_hyper_looper_geometry_uses_twenty_two_percent_diameter_step():
+    geometry = HyperLooperGeometry()
+
+    assert geometry.basic_step / (geometry.radius * 2) == pytest.approx(0.22)
+
+
+def test_each_hyper_looper_circle_is_tiled_by_fourteen_pieces_and_two_gray_triangles():
+    geometry = HyperLooperGeometry()
+
+    for circle, disk in enumerate(geometry.circles):
+        members = geometry.circle_member_paths(circle)
+        covered = members[0]
+        for member in members[1:]:
+            covered = covered.united(member)
+
+        assert len(members) == 16
+        assert len(geometry.gray_paths[circle]) == 2
+        assert disk.subtracted(covered).isEmpty()
+        assert covered.subtracted(disk).isEmpty()
+
+
+def test_hyper_looper_diamond_markers_are_centered_in_their_visible_half():
+    renderer = get_renderer("hyper-looper")
+    puzzle = get_puzzle("hyper-looper")
+    upper_marker = renderer._marker_position(
+        renderer.geometry.piece_paths[13], puzzle.solved_state().pieces[13].orientation, 13
+    )
+    lower_marker = renderer._marker_position(
+        renderer.geometry.piece_paths[15], puzzle.apply(
+            puzzle.solved_state(), TurnCommand("hyper-looper", 1)
+        ).pieces[15].orientation,
+        15,
+    )
+
+    assert renderer.geometry.piece_paths[13].contains(upper_marker)
+    assert renderer.geometry.piece_paths[15].contains(lower_marker)
+    assert upper_marker.y() < 0 < lower_marker.y()
+    assert upper_marker.y() < min(
+        polygon.boundingRect().center().y()
+        for polygon in renderer.geometry.piece_paths[13].toFillPolygons()
+    )

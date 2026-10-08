@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import math
+from typing import TYPE_CHECKING
 
 from PyQt6.QtCore import QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 
-from game.application.session import MoveTransition
 from game.domain.state import BoardState, Orientation, Piece
 from game.puzzles.colors import (
     EMPTY_PIECE_COLOR,
@@ -21,6 +21,9 @@ from game.puzzles.colors import (
     TRANSPARENT_COLOR,
 )
 from game.puzzles.geometry import circle_path
+
+if TYPE_CHECKING:
+    from game.application.session import MoveTransition
 
 
 class LooperGeometry:

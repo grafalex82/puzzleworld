@@ -1,4 +1,4 @@
-"""Renderer protocol and registry; puzzle-specific drawing lives with puzzles."""
+"""Shared UI protocol for puzzle-specific renderers."""
 
 from __future__ import annotations
 
@@ -25,15 +25,3 @@ class PuzzleRenderer(Protocol):
     def draw_transition(
         self, painter: QPainter, transition: MoveTransition, progress: float, hover_circle: int | None
     ) -> None: ...
-
-
-def get_renderer(puzzle_id: str) -> PuzzleRenderer:
-    if puzzle_id == "looper":
-        from game.puzzles.looper.renderer import LooperRenderer
-
-        return LooperRenderer()
-    if puzzle_id == "super-looper":
-        from game.puzzles.super_looper.renderer import SuperLooperRenderer
-
-        return SuperLooperRenderer()
-    raise KeyError(f"No renderer is registered for puzzle: {puzzle_id}")

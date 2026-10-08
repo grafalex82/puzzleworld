@@ -14,6 +14,7 @@ class SuperLooperPuzzle:
     display_name = "Super Looper"
     circle_count = 3
     circle_element_count = 9
+    piece_count = 15
 
     # Paths are ordered from left to right.  A diamond is one logical piece even
     # though the renderer paints its permanently paired upper and lower regions.
@@ -43,11 +44,12 @@ class SuperLooperPuzzle:
         (5, 7, 9, 8, 10, 11, 12, 13, 14),
     )
 
-    def slot_kind(self, slot: int) -> str:
+    @classmethod
+    def slot_kind(cls, slot: int) -> str:
         """Return the stable geometric family of a Super Looper board slot."""
-        if not 0 <= slot < len(self._specs):
+        if not 0 <= slot < len(cls._specs):
             raise DomainError("Super Looper slot index is out of range.")
-        return self._specs[slot][2]
+        return cls._specs[slot][2]
 
 
     def solved_state(self) -> BoardState:
@@ -106,6 +108,3 @@ class SuperLooperPuzzle:
         """Return whether the state matches the canonical Super Looper arrangement."""
         self.validate_state(state)
         return state == self.solved_state()
-
-
-SUPER_LOOPER = SuperLooperPuzzle()

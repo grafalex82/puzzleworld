@@ -45,7 +45,7 @@ def test_selecting_super_looper_replaces_only_the_shared_session_board(monkeypat
     window.close()
 
 
-def test_window_starts_with_the_last_selected_implemented_puzzle(monkeypatch):
+def test_window_starts_with_the_last_selected_puzzle(monkeypatch):
     monkeypatch.setattr("game.ui.game_window.load_settings", lambda: AppSettings(250, "super-looper"))
     window = GameWindow()
 
@@ -53,23 +53,25 @@ def test_window_starts_with_the_last_selected_implemented_puzzle(monkeypatch):
     window.close()
 
 
-def test_hyper_looper_cannot_be_selected_even_through_the_selection_handler(monkeypatch):
+def test_selecting_hyper_looper_replaces_only_the_shared_session_board(monkeypatch):
     saved = []
     monkeypatch.setattr("game.ui.game_window.save_settings", saved.append)
     window = GameWindow(GameSession())
 
     window._select_puzzle("hyper-looper")
 
-    assert window.session.puzzle.puzzle_id == "looper"
-    assert saved == []
+    assert window.session.puzzle.puzzle_id == "hyper-looper"
+    assert len(window.session.board.pieces) == 22
+    assert saved[-1].puzzle_id == "hyper-looper"
+    window.session.mark_saved()
     window.close()
 
 
-def test_hyper_looper_menu_action_stays_disabled_after_ui_refresh():
+def test_hyper_looper_menu_action_is_enabled_after_ui_refresh():
     window = GameWindow(GameSession())
 
     window._refresh_ui()
 
     hyper_action = next(action for action, puzzle_id in window.puzzle_actions.items() if puzzle_id == "hyper-looper")
-    assert not hyper_action.isEnabled()
+    assert hyper_action.isEnabled()
     window.close()

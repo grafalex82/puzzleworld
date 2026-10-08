@@ -22,9 +22,8 @@ from game.persistence.game_state import (
     save_game,
 )
 from game.persistence.settings import load_settings, save_settings
-from game.puzzles.registry import available_puzzles
+from game.puzzles.registry import available_puzzles, get_renderer
 from game.ui.board import GameBoardWidget
-from game.ui.renderer import get_renderer
 
 
 class GameWindow(QMainWindow):
@@ -111,9 +110,7 @@ class GameWindow(QMainWindow):
         )
         self.scramble_actions: dict[QAction, ScrambleDifficulty] = {}
         self.puzzle_actions: dict[QAction, str] = {}
-        self._implemented_puzzle_ids = {
-            descriptor.puzzle_id for descriptor in available_puzzles() if descriptor.implemented
-        }
+        self._puzzle_ids = {descriptor.puzzle_id for descriptor in available_puzzles()}
         for difficulty in ScrambleDifficulty:
             label = {
                 ScrambleDifficulty.EASY: self.tr("Easy — 6 turns"),
@@ -153,12 +150,7 @@ class GameWindow(QMainWindow):
             action = QAction(descriptor.display_name, self)
             action.setCheckable(True)
             action.setChecked(descriptor.puzzle_id == self.session.puzzle.puzzle_id)
-            action.setEnabled(descriptor.implemented)
-            action.setStatusTip(
-                self.tr("Select this puzzle")
-                if descriptor.implemented
-                else self.tr("Planned for a future version")
-            )
+            action.setStatusTip(self.tr("Select this puzzle"))
             action.triggered.connect(
                 lambda checked=False, puzzle_id=descriptor.puzzle_id: self._select_puzzle(puzzle_id)
             )
@@ -252,7 +244,7 @@ class GameWindow(QMainWindow):
         """Switch puzzle family while keeping window and session mechanics shared."""
         if puzzle_id == self.session.puzzle.puzzle_id:
             return
-        if puzzle_id not in self._implemented_puzzle_ids:
+        if puzzle_id not in self._puzzle_ids:
             return
         if not self._confirm_loss(self.tr("change puzzle type")):
             self._refresh_ui()
@@ -428,7 +420,7 @@ class GameWindow(QMainWindow):
             self.tr("About Puzzle World"),
             self.tr(
                 "Puzzle World\n\nA desktop collection of colorful mechanical puzzles.\n"
-                "This version includes Looper and Super Looper."
+                "This version includes Looper, Super Looper, and Hyper Looper."
             ),
         )
 
@@ -444,7 +436,7 @@ class GameWindow(QMainWindow):
         for action in self.scramble_actions:
             action.setEnabled(not busy)
         for action, puzzle_id in self.puzzle_actions.items():
-            action.setEnabled(not busy and puzzle_id in self._implemented_puzzle_ids)
+            action.setEnabled(not busy and puzzle_id in self._puzzle_ids)
             action.setChecked(puzzle_id == self.session.puzzle.puzzle_id)
         mode_text = self.tr("Solving") if self.session.mode is GameMode.SOLVING else self.tr("Free play")
         self._mode_label.setText(self.tr("Mode: %1").replace("%1", mode_text))
