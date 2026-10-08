@@ -69,12 +69,12 @@ def test_turn_shortcuts_map_keys_to_circles_and_directions():
     window.show()
     window.board.setFocus()
     expected_turns = (
-        (Qt.Key.Key_Q, Qt.KeyboardModifier.NoModifier, 0, TurnDirection.CLOCKWISE),
-        (Qt.Key.Key_W, Qt.KeyboardModifier.NoModifier, 1, TurnDirection.CLOCKWISE),
-        (Qt.Key.Key_E, Qt.KeyboardModifier.NoModifier, 2, TurnDirection.CLOCKWISE),
-        (Qt.Key.Key_Q, Qt.KeyboardModifier.ShiftModifier, 0, TurnDirection.COUNTERCLOCKWISE),
-        (Qt.Key.Key_W, Qt.KeyboardModifier.ShiftModifier, 1, TurnDirection.COUNTERCLOCKWISE),
-        (Qt.Key.Key_E, Qt.KeyboardModifier.ShiftModifier, 2, TurnDirection.COUNTERCLOCKWISE),
+        (Qt.Key.Key_Q, Qt.KeyboardModifier.NoModifier, 0, TurnDirection.COUNTERCLOCKWISE),
+        (Qt.Key.Key_W, Qt.KeyboardModifier.NoModifier, 1, TurnDirection.COUNTERCLOCKWISE),
+        (Qt.Key.Key_E, Qt.KeyboardModifier.NoModifier, 2, TurnDirection.COUNTERCLOCKWISE),
+        (Qt.Key.Key_Q, Qt.KeyboardModifier.ShiftModifier, 0, TurnDirection.CLOCKWISE),
+        (Qt.Key.Key_W, Qt.KeyboardModifier.ShiftModifier, 1, TurnDirection.CLOCKWISE),
+        (Qt.Key.Key_E, Qt.KeyboardModifier.ShiftModifier, 2, TurnDirection.CLOCKWISE),
     )
 
     for key, modifiers, circle, direction in expected_turns:
@@ -98,14 +98,14 @@ def test_turn_shortcuts_are_queued_while_animation_runs():
     QTest.keyClick(window.board, Qt.Key.Key_W, Qt.KeyboardModifier.ShiftModifier)
 
     assert window.session.history.commands == (
-        TurnCommand("looper", 0, TurnDirection.CLOCKWISE),
+        TurnCommand("looper", 0, TurnDirection.COUNTERCLOCKWISE),
     )
 
     QTest.qWait(600)
 
     assert window.session.history.commands == (
-        TurnCommand("looper", 0, TurnDirection.CLOCKWISE),
-        TurnCommand("looper", 1, TurnDirection.COUNTERCLOCKWISE),
+        TurnCommand("looper", 0, TurnDirection.COUNTERCLOCKWISE),
+        TurnCommand("looper", 1, TurnDirection.CLOCKWISE),
     )
     window.session.mark_saved()
     window.close()

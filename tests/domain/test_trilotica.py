@@ -39,6 +39,17 @@ def test_right_turn_swaps_the_two_three_piece_sets_atomically():
     assert turned.pieces[8] == solved.pieces[4]
 
 
+def test_left_counterclockwise_turn_follows_the_rendered_counterclockwise_slots():
+    before = PUZZLE.apply(PUZZLE.solved_state(), TurnCommand("trilotica", 1))
+    turned = PUZZLE.apply(
+        before, TurnCommand("trilotica", 0, TurnDirection.COUNTERCLOCKWISE)
+    )
+
+    assert turned.pieces[2] == before.pieces[0]
+    assert turned.pieces[4] == before.pieces[2]
+    assert turned.pieces[0] == before.pieces[4]
+
+
 def test_trilotica_rejects_a_third_circle():
     with pytest.raises(DomainError):
         PUZZLE.apply(PUZZLE.solved_state(), TurnCommand("trilotica", 2))

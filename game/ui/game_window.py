@@ -420,8 +420,8 @@ class GameWindow(QMainWindow):
             self.tr(
                 "Left click: turn a circle counter-clockwise\n"
                 "Right click: turn it clockwise\n"
-                "%1: turn circles %2 clockwise\n"
-                "%3: turn circles %2 counter-clockwise\n"
+                "%1: turn circles %2 counter-clockwise\n"
+                "%3: turn circles %2 clockwise\n"
                 "Ctrl+Z / Ctrl+Y: undo / redo\nEscape: clear transient UI"
             )
             .replace("%1", shortcut_keys)
@@ -436,7 +436,7 @@ class GameWindow(QMainWindow):
             self.tr("About Puzzle World"),
             self.tr(
                 "Puzzle World\n\nA desktop collection of colorful mechanical puzzles.\n"
-                "This version includes Looper, Super Looper, and Hyper Looper."
+                "This version includes Looper, Super Looper, Hyper Looper, TriLotica, and Lotica."
             ),
         )
 

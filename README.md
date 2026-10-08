@@ -8,6 +8,7 @@ Puzzle World is a desktop application for playing a growing collection of flat m
 - **Super Looper** — a Looper modification with deeper cuts and more elements, adding oriented vertical and paired diamond pieces.
 - **Hyper Looper** — a further modification with deeper cuts and even more elements: oriented lenses and large paired diamonds, unoriented vertical and small paired diamonds, and a light-gray final lens.
 - **TriLotica** — two circles one radius apart: the left disk cycles three lenses and three curved triangles by 120 degrees, while the right disk swaps two three-piece sets with a half-turn.
+- **Lotica** — two circles one radius apart: the left disk cycles four lenses and four curved triangles by 90 degrees, while the right disk swaps two lens-and-triangle sets with a half-turn.
 
 ## Install
 
@@ -43,6 +44,7 @@ game/
 │   ├── super_looper/       Super Looper model and its independent Qt renderer
 │   ├── hyper_looper/       Hyper Looper model and its independent Qt renderer
 │   ├── trilotica/          TriLotica model and its independent Qt renderer
+│   ├── lotica/             Lotica model and its independent Qt renderer
 │   └── registry.py         Implemented and planned puzzle registry
 ├── application/            Sessions, game modes, history, and scrambles
 ├── input/                  Input-to-command translation without puzzle rules
@@ -67,7 +69,7 @@ New puzzle families belong in `game/puzzles/<puzzle_id>/`. Each puzzle owns its 
 - Left click a highlighted circle to turn it counter-clockwise by 180 degrees.
 - Right click a highlighted circle to turn it clockwise. Looper is a half-turn puzzle, so both directions currently have the same logical result.
 - The board automatically fits the window and resizes with it.
-- `Q`, `W`, and `E` turn circles 1, 2, and 3 clockwise; hold `Shift` to turn the corresponding circle counter-clockwise.
+- `Q`, `W`, and `E` turn circles 1, 2, and 3 counter-clockwise; hold `Shift` to turn the corresponding circle clockwise.
 - `Ctrl+Z` / `Ctrl+Y` undo and redo; `Ctrl+Shift+Z` is an alternate redo shortcut.
 - `Ctrl+O` opens a JSON save and `Ctrl+S` saves it.
 - `Escape` clears transient selection or messages and never exits the application.

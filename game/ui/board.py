@@ -159,9 +159,9 @@ class GameBoardWidget(QWidget):
             Qt.KeyboardModifier.ShiftModifier,
         ):
             direction = (
-                TurnDirection.COUNTERCLOCKWISE
+                TurnDirection.CLOCKWISE
                 if event.modifiers() == Qt.KeyboardModifier.ShiftModifier
-                else TurnDirection.CLOCKWISE
+                else TurnDirection.COUNTERCLOCKWISE
             )
             self.turn_shortcut_requested.emit(circle, direction)
             event.accept()

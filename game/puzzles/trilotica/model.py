@@ -72,7 +72,8 @@ class TriLoticaPuzzle:
 
         pieces = list(state.pieces)
         if command.circle == 0:
-            offset = 1 if command.direction.value == "clockwise" else -1
+            # Slot order follows the renderer's counter-clockwise geometry.
+            offset = -1 if command.direction.value == "clockwise" else 1
             self._cycle(state.pieces, pieces, self.left_lens_slots, offset)
             self._cycle(state.pieces, pieces, self.left_triangle_slots, offset)
         else:

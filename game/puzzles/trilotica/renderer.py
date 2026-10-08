@@ -159,10 +159,6 @@ class TriLoticaRenderer:
 
         angle = 120.0 if circle == 0 else 180.0
         sign = 1.0 if transition.command.direction.value == "clockwise" else -1.0
-        # The left disk's cyclic model ordering is opposite Qt's visual
-        # rotation convention: Q must travel left and Shift+Q must travel right.
-        if circle == 0:
-            sign = -sign
         center = QPointF(self.geometry.circle_centers[circle], 0.0)
         painter.save()
         painter.setClipPath(self.geometry.circles[circle])
