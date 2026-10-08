@@ -12,6 +12,8 @@ from game.puzzles.looper.model import LooperPuzzle
 from game.puzzles.looper.renderer import LooperRenderer
 from game.puzzles.super_looper.model import SuperLooperPuzzle
 from game.puzzles.super_looper.renderer import SuperLooperRenderer
+from game.puzzles.trilotica.model import TriLoticaPuzzle
+from game.puzzles.trilotica.renderer import TriLoticaRenderer
 
 if TYPE_CHECKING:
     from game.ui.renderer import PuzzleRenderer
@@ -20,6 +22,7 @@ _DESCRIPTORS = (
     PuzzleDescriptor("looper", "Looper", LooperPuzzle(), LooperRenderer()),
     PuzzleDescriptor("super-looper", "Super Looper", SuperLooperPuzzle(), SuperLooperRenderer()),
     PuzzleDescriptor("hyper-looper", "Hyper Looper", HyperLooperPuzzle(), HyperLooperRenderer()),
+    PuzzleDescriptor("trilotica", "TriLotica", TriLoticaPuzzle(), TriLoticaRenderer()),
 )
 
 

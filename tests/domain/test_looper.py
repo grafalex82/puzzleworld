@@ -32,7 +32,7 @@ def test_one_turn_is_not_solved_and_flips_small_orientation():
     turned = PUZZLE.apply(solved, TurnCommand("looper", 0))
 
     assert not PUZZLE.is_solved(turned)
-    assert turned.pieces[0].piece_id == solved.pieces[4].piece_id
+    assert turned.pieces[0].color_id == solved.pieces[4].color_id
     assert turned.pieces[0].orientation != solved.pieces[4].orientation
 
 

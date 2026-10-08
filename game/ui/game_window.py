@@ -35,7 +35,10 @@ class GameWindow(QMainWindow):
         self._pending_victory: MoveTransition | None = None
         self._queued_shortcut_turns: deque[tuple[int, TurnDirection]] = deque()
         self.board = GameBoardWidget(
-            get_renderer(self.session.puzzle.puzzle_id), self.session.board, self._settings.animation_duration_ms
+            get_renderer(self.session.puzzle.puzzle_id),
+            self.session.board,
+            self._settings.animation_duration_ms,
+            circle_count=self.session.puzzle.circle_count,
         )
         self.setCentralWidget(self.board)
         self.setMinimumSize(800, 500)
@@ -253,7 +256,9 @@ class GameWindow(QMainWindow):
         self._current_file = None
         self.board.cancel_transients()
         self._queued_shortcut_turns.clear()
-        self.board.set_renderer(get_renderer(puzzle_id), self.session.board)
+        self.board.set_renderer(
+            get_renderer(puzzle_id), self.session.board, circle_count=self.session.puzzle.circle_count
+        )
         self._save_selected_puzzle(puzzle_id)
         self.board.show_message(self.tr("Free play · %1").replace("%1", self.session.puzzle.display_name))
         self._refresh_ui()
@@ -285,7 +290,11 @@ class GameWindow(QMainWindow):
             return
         self._current_file = path
         self._queued_shortcut_turns.clear()
-        self.board.set_renderer(get_renderer(self.session.puzzle.puzzle_id), self.session.board)
+        self.board.set_renderer(
+            get_renderer(self.session.puzzle.puzzle_id),
+            self.session.board,
+            circle_count=self.session.puzzle.circle_count,
+        )
         self._save_selected_puzzle(self.session.puzzle.puzzle_id)
         self.board.show_message(self.tr("Game loaded"))
         self.statusBar().showMessage(self.tr("Opened %1").replace("%1", path.name), 3000)
@@ -401,16 +410,23 @@ class GameWindow(QMainWindow):
 
 
     def _show_controls(self) -> None:
+        keys = ("Q", "W", "E")[: self.session.puzzle.circle_count]
+        shortcut_keys = " / ".join(keys)
+        shifted_shortcut_keys = " / ".join(f"Shift+{key}" for key in keys)
+        circles = " / ".join(str(index) for index in range(1, self.session.puzzle.circle_count + 1))
         QMessageBox.information(
             self,
             self.tr("Controls"),
             self.tr(
                 "Left click: turn a circle counter-clockwise\n"
                 "Right click: turn it clockwise\n"
-                "Q / W / E: turn circles 1 / 2 / 3 clockwise\n"
-                "Shift+Q / Shift+W / Shift+E: turn circles 1 / 2 / 3 counter-clockwise\n"
+                "%1: turn circles %2 clockwise\n"
+                "%3: turn circles %2 counter-clockwise\n"
                 "Ctrl+Z / Ctrl+Y: undo / redo\nEscape: clear transient UI"
-            ),
+            )
+            .replace("%1", shortcut_keys)
+            .replace("%2", circles)
+            .replace("%3", shifted_shortcut_keys),
         )
 
 

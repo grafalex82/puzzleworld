@@ -17,20 +17,26 @@ def _require_exact_keys(value: dict[str, Any], keys: set[str], context: str) -> 
     missing = keys - value.keys()
     extra = value.keys() - keys
     if missing:
-        raise BoardCodecError(f"{context} is missing fields: {', '.join(sorted(missing))}.")
+        raise BoardCodecError(
+            f"{context} is missing fields: {', '.join(sorted(missing))}."
+        )
     if extra:
-        raise BoardCodecError(f"{context} has unsupported fields: {', '.join(sorted(extra))}.")
+        raise BoardCodecError(
+            f"{context} has unsupported fields: {', '.join(sorted(extra))}."
+        )
 
 
 def encode_board(puzzle_id: str, board: BoardState) -> dict[str, Any]:
-    """Encode current-format board data without derivable identity metadata."""
+    """Encode board data using a puzzle's compact persistence representation."""
     puzzle = get_puzzle(puzzle_id)
     puzzle.validate_state(board)
     return {
         "pieces": [
             {
                 "color": piece.color_id.value,
-                "orientation": (None if piece.orientation is None else piece.orientation.value),
+                "orientation": (
+                    None if piece.orientation is None else piece.orientation.value
+                ),
             }
             for piece in board.pieces
         ]
@@ -38,7 +44,7 @@ def encode_board(puzzle_id: str, board: BoardState) -> dict[str, Any]:
 
 
 def decode_board(puzzle_id: str, data: Any) -> BoardState:
-    """Decode a board, deriving piece identity from its slot and color."""
+    """Decode a board from the color and orientation stored at each position."""
     puzzle = get_puzzle(puzzle_id)
     if not isinstance(data, dict):
         raise BoardCodecError("board must be an object.")
@@ -47,7 +53,10 @@ def decode_board(puzzle_id: str, data: Any) -> BoardState:
     if not isinstance(pieces_data, list):
         raise BoardCodecError("board.pieces must be an array.")
 
-    board = _decode_compact_board(puzzle, pieces_data)
+    try:
+        board = _decode_compact_board(puzzle, pieces_data)
+    except ValueError as error:
+        raise BoardCodecError(str(error)) from error
 
     try:
         puzzle.validate_state(board)
@@ -56,10 +65,13 @@ def decode_board(puzzle_id: str, data: Any) -> BoardState:
     return board
 
 
-def _decode_compact_board(puzzle: PuzzleDefinition, pieces_data: list[Any]) -> BoardState:
-    solved = puzzle.solved_state()
-    if len(pieces_data) != len(solved.pieces):
-        raise BoardCodecError(f"board.pieces must contain exactly {len(solved.pieces)} items.")
+def _decode_compact_board(
+    puzzle: PuzzleDefinition, pieces_data: list[Any]
+) -> BoardState:
+    if len(pieces_data) != len(puzzle.solved_state().pieces):
+        raise BoardCodecError(
+            f"board.pieces must contain exactly {len(puzzle.solved_state().pieces)} items."
+        )
 
     pieces: list[Piece] = []
     for index, item in enumerate(pieces_data):
@@ -69,18 +81,12 @@ def _decode_compact_board(puzzle: PuzzleDefinition, pieces_data: list[Any]) -> B
         try:
             color_id = ColorId(item["color"])
         except (TypeError, ValueError) as error:
-            raise BoardCodecError(f"Piece {index} has an unknown color identifier.") from error
+            raise BoardCodecError(
+                f"Piece {index} has an unknown color identifier."
+            ) from error
         orientation = _decode_orientation(item["orientation"], index)
 
-        candidates = [
-            piece
-            for slot, piece in enumerate(solved.pieces)
-            if puzzle.slot_kind(slot) == puzzle.slot_kind(index) and piece.color_id is color_id
-        ]
-        if len(candidates) != 1:
-            raise BoardCodecError(f"Piece {index} color is not valid for its slot.")
-        canonical = candidates[0]
-        pieces.append(Piece(canonical.piece_id, color_id, orientation))
+        pieces.append(Piece(color_id, orientation))
     return BoardState(tuple(pieces))
 
 

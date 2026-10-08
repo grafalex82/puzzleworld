@@ -18,22 +18,26 @@ class SuperLooperPuzzle:
 
     # Paths are ordered from left to right.  A diamond is one logical piece even
     # though the renderer paints its permanently paired upper and lower regions.
+    # Board slots, from left to right:
+    # red lens, red vertical, orange lens, red diamond, orange vertical,
+    # yellow lens, orange diamond, yellow vertical, green lens, yellow diamond,
+    # green vertical, blue lens, green diamond, blue vertical, purple lens.
     _specs = (
-        ("lens-red", ColorId.RED, "lens"),
-        ("vertical-red", ColorId.RED, "vertical"),
-        ("lens-orange", ColorId.ORANGE, "lens"),
-        ("diamond-red", ColorId.RED, "diamond"),
-        ("vertical-orange", ColorId.ORANGE, "vertical"),
-        ("lens-yellow", ColorId.YELLOW, "lens"),
-        ("diamond-orange", ColorId.ORANGE, "diamond"),
-        ("vertical-yellow", ColorId.YELLOW, "vertical"),
-        ("lens-green", ColorId.GREEN, "lens"),
-        ("diamond-yellow", ColorId.YELLOW, "diamond"),
-        ("vertical-green", ColorId.GREEN, "vertical"),
-        ("lens-blue", ColorId.BLUE, "lens"),
-        ("diamond-green", ColorId.GREEN, "diamond"),
-        ("vertical-blue", ColorId.BLUE, "vertical"),
-        ("lens-purple", ColorId.PURPLE, "lens"),
+        (ColorId.RED, "lens"),
+        (ColorId.RED, "vertical"),
+        (ColorId.ORANGE, "lens"),
+        (ColorId.RED, "diamond"),
+        (ColorId.ORANGE, "vertical"),
+        (ColorId.YELLOW, "lens"),
+        (ColorId.ORANGE, "diamond"),
+        (ColorId.YELLOW, "vertical"),
+        (ColorId.GREEN, "lens"),
+        (ColorId.YELLOW, "diamond"),
+        (ColorId.GREEN, "vertical"),
+        (ColorId.BLUE, "lens"),
+        (ColorId.GREEN, "diamond"),
+        (ColorId.BLUE, "vertical"),
+        (ColorId.PURPLE, "lens"),
     )
 
     # In each tuple, entries are arranged so a half turn reverses the tuple.
@@ -49,47 +53,43 @@ class SuperLooperPuzzle:
         """Return the stable geometric family of a Super Looper board slot."""
         if not 0 <= slot < len(cls._specs):
             raise DomainError("Super Looper slot index is out of range.")
-        return cls._specs[slot][2]
-
+        return cls._specs[slot][1]
 
     def solved_state(self) -> BoardState:
         """Build the canonical Super Looper arrangement."""
         return BoardState(
             tuple(
-                Piece(piece_id, color_id, Orientation.UP if kind == "vertical" else None)
-                for piece_id, color_id, kind in self._specs
+                Piece(color_id, Orientation.UP if kind == "vertical" else None)
+                for color_id, kind in self._specs
             )
         )
 
-
     def validate_state(self, state: BoardState) -> None:
-        """Verify Super Looper identities, colors, and orientation-bearing slots."""
+        """Verify Super Looper color inventories and orientation-bearing slots."""
         if not isinstance(state, BoardState):
             raise DomainError("Super Looper state must be a BoardState.")
         if len(state.pieces) != len(self._specs):
             raise DomainError("Super Looper state must contain exactly 15 pieces.")
 
-        expected = {piece_id: (color_id, kind) for piece_id, color_id, kind in self._specs}
-        if set(state.piece_ids()) != set(expected):
-            raise DomainError("Super Looper state contains missing, duplicate, or unknown pieces.")
-
         for slot, piece in enumerate(state.pieces):
-            color_id, piece_kind = expected[piece.piece_id]
-            if piece.color_id is not color_id:
-                raise DomainError(f"Piece attributes are invalid for {piece.piece_id!r}.")
+            piece_kind = self.slot_kind(slot)
             if piece_kind == "vertical" and piece.orientation is None:
-                raise DomainError(f"Vertical piece {piece.piece_id!r} requires an orientation.")
+                raise DomainError(
+                    "Vertical Super Looper pieces require an orientation."
+                )
             if piece_kind != "vertical" and piece.orientation is not None:
-                raise DomainError(f"Piece {piece.piece_id!r} cannot have an orientation.")
-            if self.slot_kind(slot) != piece_kind:
-                raise DomainError(f"Piece {piece.piece_id!r} is in an incompatible slot.")
-
+                raise DomainError(
+                    "Only vertical Super Looper pieces have an orientation."
+                )
+        self._validate_color_inventory(state)
 
     def apply(self, state: BoardState, command: TurnCommand) -> BoardState:
         """Apply one atomic 180-degree turn of the requested movable circle."""
         self.validate_state(state)
         if command.puzzle_id != self.puzzle_id:
-            raise DomainError(f"Command for {command.puzzle_id!r} cannot be applied to Super Looper.")
+            raise DomainError(
+                f"Command for {command.puzzle_id!r} cannot be applied to Super Looper."
+            )
         if isinstance(command.circle, bool) or not isinstance(command.circle, int):
             raise DomainError("Circle index must be an integer.")
         if not 0 <= command.circle < self.circle_count:
@@ -103,8 +103,22 @@ class SuperLooperPuzzle:
         self.validate_state(result)
         return result
 
-
     def is_solved(self, state: BoardState) -> bool:
         """Return whether the state matches the canonical Super Looper arrangement."""
         self.validate_state(state)
         return state == self.solved_state()
+
+    def _validate_color_inventory(self, state: BoardState) -> None:
+        for kind in {kind for _, kind in self._specs}:
+            expected = sorted(
+                color.value for color, spec_kind in self._specs if spec_kind == kind
+            )
+            actual = sorted(
+                piece.color_id.value
+                for slot, piece in enumerate(state.pieces)
+                if self.slot_kind(slot) == kind
+            )
+            if actual != expected:
+                raise DomainError(
+                    "Super Looper colors are not valid for their shape family."
+                )

@@ -25,7 +25,7 @@ def test_turn_moves_nine_pieces_and_flips_only_vertical_markers(circle):
 
     assert not PUZZLE.is_solved(turned)
     for destination, source in zip(slots, reversed(slots)):
-        assert turned.pieces[destination].piece_id == solved.pieces[source].piece_id
+        assert turned.pieces[destination].color_id == solved.pieces[source].color_id
         if turned.pieces[destination].orientation is not None:
             assert turned.pieces[destination].orientation is Orientation.DOWN
 

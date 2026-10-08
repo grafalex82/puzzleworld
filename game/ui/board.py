@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from PyQt6.QtCore import QPointF, QRectF, Qt, QTimer, pyqtSignal
+from PyQt6.QtCore import QRectF, Qt, QTimer, pyqtSignal
 from PyQt6.QtGui import QColor, QKeyEvent, QMouseEvent, QPainter, QPen
 from PyQt6.QtWidgets import QWidget
 
@@ -27,10 +27,12 @@ class GameBoardWidget(QWidget):
         state: BoardState,
         animation_duration_ms: int = DEFAULT_ANIMATION_DURATION_MS,
         parent: QWidget | None = None,
+        circle_count: int = 3,
     ) -> None:
         super().__init__(parent)
         self._renderer = renderer
         self._state = state
+        self._circle_count = circle_count
         self._camera = Camera()
         self._hover_circle: int | None = None
         self._transition: MoveTransition | None = None
@@ -57,10 +59,14 @@ class GameBoardWidget(QWidget):
         self.update()
 
 
-    def set_renderer(self, renderer: PuzzleRenderer, state: BoardState) -> None:
+    def set_renderer(
+        self, renderer: PuzzleRenderer, state: BoardState, *, circle_count: int | None = None
+    ) -> None:
         self.cancel_transients()
         self._renderer = renderer
         self._state = state
+        if circle_count is not None:
+            self._circle_count = circle_count
         self.update()
 
 
@@ -148,7 +154,7 @@ class GameBoardWidget(QWidget):
             Qt.Key.Key_E: 2,
         }
         circle = circles_by_key.get(event.key())
-        if circle is not None and event.modifiers() in (
+        if circle is not None and circle < self._circle_count and event.modifiers() in (
             Qt.KeyboardModifier.NoModifier,
             Qt.KeyboardModifier.ShiftModifier,
         ):

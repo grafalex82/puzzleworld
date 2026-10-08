@@ -33,13 +33,15 @@ def test_save_load_round_trip_restores_mode_count_and_board(tmp_path):
     assert not restored.is_dirty
 
 
-def test_current_save_omits_derivable_piece_id_and_kind():
+def test_current_save_contains_only_piece_color_and_orientation():
     session = GameSession()
 
     data = GameState.from_snapshot(session.snapshot()).to_dict()
 
     assert data["version"] == 1
-    assert all(set(piece) == {"color", "orientation"} for piece in data["board"]["pieces"])
+    assert all(
+        set(piece) == {"color", "orientation"} for piece in data["board"]["pieces"]
+    )
     assert data["board"]["pieces"][0]["color"] == "red"
     assert not data["board"]["pieces"][0]["color"].startswith("#")
     assert "scramble" not in data
@@ -80,7 +82,27 @@ def test_hyper_looper_save_round_trip_preserves_compound_piece_positions(tmp_pat
     assert loaded.board == session.board
 
 
-def test_compact_save_rejects_duplicate_piece_identity(tmp_path):
+def test_trilotica_save_round_trip_preserves_the_visible_color_arrangement(tmp_path):
+    session = GameSession("trilotica")
+    session.perform_turn(0)
+    session.perform_turn(1)
+    target = tmp_path / "trilotica.json"
+
+    state = GameState.from_snapshot(session.snapshot())
+    data = state.to_dict()
+    save_game(target, state)
+    loaded = load_game(target)
+
+    assert loaded.puzzle_id == "trilotica"
+    assert all(
+        set(piece) == {"color", "orientation"} for piece in data["board"]["pieces"]
+    )
+    assert tuple(piece.color_id for piece in loaded.board.pieces) == tuple(
+        piece.color_id for piece in session.board.pieces
+    )
+
+
+def test_compact_save_rejects_an_invalid_color_inventory(tmp_path):
     data = GameState.from_snapshot(GameSession().snapshot()).to_dict()
     data["board"]["pieces"][2]["color"] = data["board"]["pieces"][0]["color"]
     target = tmp_path / "duplicate.json"
@@ -121,7 +143,12 @@ def test_unknown_version_is_rejected(tmp_path):
 
 @pytest.mark.parametrize(
     ("field", "value"),
-    [("move_count", -1), ("solving_active", "yes"), ("mode", "arcade"), ("scramble", None)],
+    [
+        ("move_count", -1),
+        ("solving_active", "yes"),
+        ("mode", "arcade"),
+        ("scramble", None),
+    ],
 )
 def test_invalid_top_level_fields_are_rejected(tmp_path, field, value):
     data = GameState.from_snapshot(GameSession().snapshot()).to_dict()

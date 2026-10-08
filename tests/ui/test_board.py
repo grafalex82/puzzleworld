@@ -111,6 +111,18 @@ def test_turn_shortcuts_are_queued_while_animation_runs():
     window.close()
 
 
+def test_two_circle_puzzles_ignore_the_third_turn_shortcut():
+    window = GameWindow(GameSession("trilotica"))
+
+    window.show()
+    window.board.setFocus()
+    QTest.keyClick(window.board, Qt.Key.Key_E)
+
+    assert window.session.history.commands == ()
+    window.session.mark_saved()
+    window.close()
+
+
 def test_renderer_palette_covers_every_domain_color():
     assert set(PIECE_PALETTE) == set(ColorId)
 

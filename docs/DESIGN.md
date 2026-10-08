@@ -4,7 +4,7 @@
 
 - **Puzzle definition**: pure rules for one puzzle family. It creates and validates states, applies commands, and recognizes solved states.
 - **Board state**: an immutable ordered collection of pieces for one puzzle.
-- **Piece**: an immutable identity, `ColorId`, kind, and optional orientation.
+- **Piece**: an immutable `ColorId` and optional orientation. Its kind comes from the board position.
 - **Turn command**: an immutable request containing a puzzle id, circle index, and direction.
 - **Session**: application state around a puzzle: mode, history, move count, dirty state, and solving lifecycle.
 - **Scramble**: a reproducible scenario that applies generated turns without adding them to user history, then starts a solving game.
@@ -34,10 +34,14 @@ A lens is an intersection of circles separated by four basic offsets. A vertical
 
 Each circle rotates five lenses, four verticals, three large diamonds, and two small diamonds. The two gray triangular remnants are renderer-only paths that rotate with the circle. A 180-degree turn atomically follows the geometric half-turn permutation and flips only the lens and large-diamond orientations.
 
+## TriLotica rules
+
+TriLotica has two circles whose centers are one radius apart. Three copies of the right circle around the left center, separated by 120 degrees, define three small lenses. The intersections with the left circle, after those lenses are removed, define three curved triangular pieces. The left turn cycles the three lens slots and three triangle slots independently by 120 degrees. The bridge group in the right disk consists of two lenses and one triangle; its half turn swaps those slots with their three right-side counterparts. No TriLotica piece has logical orientation, so a right half turn is its own inverse in the model. The two remaining right-disk triangles are renderer-only decorative paths and rotate during its animation.
+
 ## Domain invariants
 
 1. States and commands are immutable.
-2. A state always contains exactly nine uniquely identified Looper pieces.
+2. A state always contains exactly nine Looper positions with a valid color inventory.
 3. Slot kind is stable: small pieces occupy even slots and large pieces occupy odd slots.
 4. Only small pieces have an orientation; large pieces never do.
 5. Applying a command is atomic and deterministic.

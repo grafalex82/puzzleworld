@@ -27,7 +27,6 @@ class Orientation(str, Enum):
 
 @dataclass(frozen=True, slots=True)
 class Piece:
-    piece_id: str
     color_id: ColorId
     orientation: Orientation | None
 
@@ -35,13 +34,9 @@ class Piece:
         """Return this piece with its marker orientation reversed."""
         if self.orientation is None:
             return self
-        return Piece(self.piece_id, self.color_id, self.orientation.flipped())
+        return Piece(self.color_id, self.orientation.flipped())
 
 
 @dataclass(frozen=True, slots=True)
 class BoardState:
     pieces: tuple[Piece, ...]
-
-    def piece_ids(self) -> tuple[str, ...]:
-        """Return piece identities in their current board order."""
-        return tuple(piece.piece_id for piece in self.pieces)
