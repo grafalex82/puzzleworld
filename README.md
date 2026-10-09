@@ -42,6 +42,14 @@ Two circles one radius apart: the left disk cycles four lenses and four curved t
 
 ![Solved Lotica puzzle](docs/screenshots/lotica.png)
 
+### Lemons
+
+A puzzle with a large circle and a small circle. The large disk turns by 90 degrees,
+the small disk by 60 degrees. Assemble yellow in the small disk and form the red,
+green, and blue groups in any order around the large disk.
+
+![Solved Lemons puzzle](docs/screenshots/lemons.png)
+
 ## Install
 
 ```text
@@ -78,6 +86,7 @@ game/
 │   ├── trilotica/          TriLotica model and its independent Qt renderer
 │   ├── trilotica_v2/       TriLotica v2 model and its independent Qt renderer
 │   ├── lotica/             Lotica model and its independent Qt renderer
+│   ├── lemons/             Lemons model and its independent Qt renderer
 │   └── registry.py         Implemented and planned puzzle registry
 ├── application/            Sessions, game modes, history, and scrambles
 ├── input/                  Input-to-command translation without puzzle rules

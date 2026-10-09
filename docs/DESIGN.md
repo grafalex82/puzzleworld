@@ -42,6 +42,12 @@ TriLotica has two circles whose centers are one radius apart. Three copies of th
 
 TriLotica v2 has two equal turnable disks whose centres, and whose three left-disk auxiliary-circle centres, are `50/60 R` from the left centre. Their common intersection is an added central triangle. The two auxiliary circles on either side of the right centre form one of three large truncated lenses carried by the left disk; each is cut out of a large triangle. The three ordinary lenses, three large truncated lenses, and three cut-out triangles each cycle by 120 degrees with the left disk. The right half-turn swaps its two lenses and triangle with their three opposing slots, and also carries the central left triangle into its green partner on the right.
 
+## Lemons rules
+
+Lemons has a large disk of diameter 80 and a small right disk of diameter 50. Their centres are 40 units apart. Six copies of the large circle, at 60-degree intervals around the small-disk centre, divide the small disk into twelve alternating lens and triangle elements. Five of those elements lie in the large disk. Quarter-turn copies of that five-element region make the upper, left, and lower groups; the remaining central cross is decorative only.
+
+The large disk turns by 90 degrees and cycles each of its five elements through the right, lower, left, and upper group positions. The small disk turns by 60 degrees, cycling its twelve elements in two independent shape-family rings. Pieces have no orientation. A completed puzzle has all twelve yellow pieces in the small disk and a uniform red, green, and blue group in the other three positions, in any order.
+
 ## Domain invariants
 
 1. States and commands are immutable.

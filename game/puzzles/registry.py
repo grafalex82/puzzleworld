@@ -8,6 +8,8 @@ from game.domain.rules import PuzzleDefinition
 from game.puzzles.base import PuzzleDescriptor
 from game.puzzles.hyper_looper.model import HyperLooperPuzzle
 from game.puzzles.hyper_looper.renderer import HyperLooperRenderer
+from game.puzzles.lemons.model import LemonsPuzzle
+from game.puzzles.lemons.renderer import LemonsRenderer
 from game.puzzles.looper.model import LooperPuzzle
 from game.puzzles.looper.renderer import LooperRenderer
 from game.puzzles.lotica.model import LoticaPuzzle
@@ -29,6 +31,7 @@ _DESCRIPTORS = (
     PuzzleDescriptor("trilotica", "TriLotica", TriLoticaPuzzle(), TriLoticaRenderer()),
     PuzzleDescriptor("trilotica-v2", "TriLotica v2", TriLoticaV2Puzzle(), TriLoticaV2Renderer()),
     PuzzleDescriptor("lotica", "Lotica", LoticaPuzzle(), LoticaRenderer()),
+    PuzzleDescriptor("lemons", "Lemons", LemonsPuzzle(), LemonsRenderer()),
 )
 
 

@@ -436,7 +436,7 @@ class GameWindow(QMainWindow):
             self.tr("About Puzzle World"),
             self.tr(
                 "Puzzle World\n\nA desktop collection of colorful mechanical puzzles.\n"
-                "This version includes Looper, Super Looper, Hyper Looper, TriLotica, TriLotica v2, and Lotica."
+                "This version includes Looper, Super Looper, Hyper Looper, TriLotica, TriLotica v2, Lotica, and Lemons."
             ),
         )
 
