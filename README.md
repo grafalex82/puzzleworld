@@ -28,6 +28,14 @@ Two circles one radius apart: the left disk cycles three lenses and three curved
 
 ![Solved TriLotica puzzle](docs/screenshots/trilotica.png)
 
+### TriLotica v2
+
+TriLotica with deeper cuts that add a central triangle and a cycle of three large
+truncated lenses to the left disk; turn steps remain 120 degrees on the left and
+180 degrees on the right.
+
+![Solved TriLotica v2 puzzle](docs/screenshots/trilotica-v2.png)
+
 ### Lotica
 
 Two circles one radius apart: the left disk cycles four lenses and four curved triangles by 90 degrees, while the right disk swaps two lens-and-triangle sets with a half-turn.
@@ -68,6 +76,7 @@ game/
 │   ├── super_looper/       Super Looper model and its independent Qt renderer
 │   ├── hyper_looper/       Hyper Looper model and its independent Qt renderer
 │   ├── trilotica/          TriLotica model and its independent Qt renderer
+│   ├── trilotica_v2/       TriLotica v2 model and its independent Qt renderer
 │   ├── lotica/             Lotica model and its independent Qt renderer
 │   └── registry.py         Implemented and planned puzzle registry
 ├── application/            Sessions, game modes, history, and scrambles

@@ -38,6 +38,10 @@ Each circle rotates five lenses, four verticals, three large diamonds, and two s
 
 TriLotica has two circles whose centers are one radius apart. Three copies of the right circle around the left center, separated by 120 degrees, define three small lenses. The intersections with the left circle, after those lenses are removed, define three curved triangular pieces. The left turn cycles the three lens slots and three triangle slots independently by 120 degrees. The bridge group in the right disk consists of two lenses and one triangle; its half turn swaps those slots with their three right-side counterparts. No TriLotica piece has logical orientation, so a right half turn is its own inverse in the model. The two remaining right-disk triangles are renderer-only decorative paths and rotate during its animation.
 
+## TriLotica v2 rules
+
+TriLotica v2 has two equal turnable disks whose centres, and whose three left-disk auxiliary-circle centres, are `50/60 R` from the left centre. Their common intersection is an added central triangle. The two auxiliary circles on either side of the right centre form one of three large truncated lenses carried by the left disk; each is cut out of a large triangle. The three ordinary lenses, three large truncated lenses, and three cut-out triangles each cycle by 120 degrees with the left disk. The right half-turn swaps its two lenses and triangle with their three opposing slots, and also carries the central left triangle into its green partner on the right.
+
 ## Domain invariants
 
 1. States and commands are immutable.
