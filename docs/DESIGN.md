@@ -57,6 +57,20 @@ Lemons has a large disk of diameter 80 and a small right disk of diameter 50. Th
 
 The large disk turns by 90 degrees and cycles each of its five elements through the right, lower, left, and upper group positions. The small disk turns by 60 degrees, cycling its twelve elements in two independent shape-family rings. Pieces have no orientation. A completed puzzle has all twelve yellow pieces in the small disk and a uniform red, green, and blue group in the other three positions, in any order.
 
+## Trinita rules
+
+Trinita has one central disk of diameter 60 and three surrounding disks of diameter
+40. Each small-disk centre is 26 units from the central centre; all four disks turn
+by 120 degrees. Three copies of the central disk, rotated about a small-disk centre,
+partition each small disk into three truncated lenses, three curved triangles, and a
+central triangle. The small turn cycles its lens and triangle triplets separately;
+the central triangle is invariant under that turn. Four cells from each small disk
+lie in the central disk, so its turn cycles each of those cells through the three
+small-disk positions. The central cross is the central disk with the three small
+disks removed. It is gray renderer-only decoration: it rotates during the central
+turn but is not stored in the board state. Pieces have no orientation. A finish has
+one uniform colour in every small disk, in any permutation of blue, red, and yellow.
+
 ## Domain invariants
 
 1. States and commands are immutable.

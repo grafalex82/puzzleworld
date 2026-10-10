@@ -28,6 +28,8 @@ from game.puzzles.trilotica.renderer import (
 )
 from game.puzzles.trilotica_v2.model import TriLoticaV2Puzzle
 from game.puzzles.trilotica_v2.renderer import TriLoticaV2Renderer
+from game.puzzles.trinita.model import TrinitaPuzzle
+from game.puzzles.trinita.renderer import TrinitaRenderer
 
 if TYPE_CHECKING:
     from game.ui.renderer import PuzzleRenderer
@@ -45,6 +47,7 @@ _DESCRIPTORS = (
     ),
     PuzzleDescriptor("trilotica-v2", "TriLotica v2", TriLoticaV2Puzzle(), TriLoticaV2Renderer()),
     PuzzleDescriptor("lotica", "Lotica", LoticaPuzzle(), LoticaRenderer()),
+    PuzzleDescriptor("trinita", "Trinita", TrinitaPuzzle(), TrinitaRenderer()),
     PuzzleDescriptor("lemons", "Lemons", LemonsPuzzle(), LemonsRenderer()),
 )
 

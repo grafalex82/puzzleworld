@@ -36,6 +36,13 @@ truncated lenses to the left disk; turn steps remain 120 degrees on the left and
 
 ![Solved TriLotica v2 puzzle](docs/screenshots/trilotica-v2.png)
 
+### Trinita
+
+Four circles turn by 120 degrees. Assemble seven equal colours in each small disk;
+the three completed colour groups may occupy any disks.
+
+![Solved Trinita puzzle](docs/screenshots/trinita.png)
+
 ### Double TriLotica and Triple TriLotica
 
 TriLotica variants with two or three right-hand disks around the same central
@@ -98,6 +105,7 @@ game/
 │   ├── hyper_looper/       Hyper Looper model and its independent Qt renderer
 │   ├── trilotica/          TriLotica model and its independent Qt renderer
 │   ├── trilotica_v2/       TriLotica v2 model and its independent Qt renderer
+│   ├── trinita/            Trinita model and its independent Qt renderer
 │   ├── lotica/             Lotica model and its independent Qt renderer
 │   ├── lemons/             Lemons model and its independent Qt renderer
 │   └── registry.py         Implemented and planned puzzle registry
