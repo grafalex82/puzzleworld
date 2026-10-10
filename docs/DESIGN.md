@@ -93,6 +93,9 @@ The puzzle registry resolves a stable `puzzle_id` to a domain definition. The re
 
 The domain imports no Qt, filesystem, clock, or rendering module. Persistence can convert a session snapshot to JSON, but filesystem I/O never occurs in the session. UI invokes public session methods and consumes returned transitions; it never mutates pieces or arrays.
 
+For the complete extension procedure, model and renderer contracts, persistence
+constraints, and test checklist, see [ADDING_PUZZLES.md](ADDING_PUZZLES.md).
+
 ## Rendering and animation
 
 The board uses logical coordinates transformed by a camera. Fit scale reserves ten percent margin. Geometry is cached per viewport/camera revision. A stable state is rendered from the session snapshot. For a transition, the model has already advanced; the renderer interpolates affected pieces from the transition's before state to its after positions. Input that could create a conflicting move is disabled until the indivisible animation ends.

@@ -89,7 +89,7 @@ pytest
 ## Repository structure
 
 ```text
-docs/                       Design rules and the versioned save format
+docs/                       Design rules, puzzle-extension guide, and save format
 game/
 ├── domain/                 Shared immutable domain values and rule protocols
 ├── puzzles/
@@ -129,4 +129,6 @@ New puzzle families belong in `game/puzzles/<puzzle_id>/`. Each puzzle owns its 
 - `Ctrl+O` opens a JSON save and `Ctrl+S` saves it.
 - `Escape` clears transient selection or messages and never exits the application.
 
-See [docs/DESIGN.md](docs/DESIGN.md) for rules and architecture, and [docs/SAVE_FORMAT.md](docs/SAVE_FORMAT.md) for the save format.
+See [docs/DESIGN.md](docs/DESIGN.md) for rules and architecture,
+[docs/ADDING_PUZZLES.md](docs/ADDING_PUZZLES.md) for the implementation guide for
+new puzzle families, and [docs/SAVE_FORMAT.md](docs/SAVE_FORMAT.md) for the save format.
