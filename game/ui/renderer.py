@@ -16,6 +16,16 @@ class PuzzleRenderer(Protocol):
     def bounds(self) -> QRectF: ...
 
 
+    def shortcut_circles(self) -> tuple[int, ...]:
+        """Return circle indices in Q/W/E/R shortcut order."""
+        ...
+
+
+    def shortcut_labels(self) -> tuple[str, ...]:
+        """Return the user-facing labels for Q/W/E/R shortcuts."""
+        ...
+
+
     def hit_test_circle(self, point: QPointF) -> int | None: ...
 
 

@@ -19,6 +19,8 @@ PIECE_PALETTE = {
     ColorId.YELLOW: "#fdd835",
     ColorId.GREEN: "#23b26d",
     ColorId.BLUE: "#2196f3",
+    ColorId.TEAL: "#4fc3f7",
+    ColorId.NAVY: "#173f8a",
     ColorId.PURPLE: "#8e44ad",
     ColorId.GRAY: "#d3d8dc",
 }

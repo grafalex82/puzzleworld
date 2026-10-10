@@ -119,6 +119,14 @@ class LemonsRenderer:
     def bounds(self) -> QRectF:
         return QRectF(self._bounds)
 
+
+    def shortcut_circles(self) -> tuple[int, ...]:
+        return (0, 1)
+
+
+    def shortcut_labels(self) -> tuple[str, ...]:
+        return ("left", "right")
+
     def hit_test_circle(self, point: QPointF) -> int | None:
         distances = (
             math.hypot(point.x() - self.geometry.circle_centers[0], point.y()),

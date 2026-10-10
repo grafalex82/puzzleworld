@@ -12,6 +12,8 @@ class ColorId(str, Enum):
     YELLOW = "yellow"
     GREEN = "green"
     BLUE = "blue"
+    TEAL = "teal"
+    NAVY = "navy"
     PURPLE = "purple"
     GRAY = "gray"
 

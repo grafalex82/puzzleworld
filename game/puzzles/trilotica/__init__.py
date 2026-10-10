@@ -1,5 +1,9 @@
-"""TriLotica puzzle family."""
+"""The original, Double, and Triple TriLotica puzzle family."""
 
-from game.puzzles.trilotica.model import TriLoticaPuzzle
+from game.puzzles.trilotica.model import (
+    DoubleTriLoticaPuzzle,
+    TriLoticaPuzzle,
+    TripleTriLoticaPuzzle,
+)
 
-__all__ = ["TriLoticaPuzzle"]
+__all__ = ["DoubleTriLoticaPuzzle", "TriLoticaPuzzle", "TripleTriLoticaPuzzle"]

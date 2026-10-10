@@ -123,6 +123,40 @@ def test_two_circle_puzzles_ignore_the_third_turn_shortcut():
     window.close()
 
 
+def test_four_circle_puzzle_uses_r_for_its_last_turn_shortcut():
+    window = GameWindow(GameSession("triple-trilotica"))
+
+    window.show()
+    window.board.setFocus()
+    QTest.keyClick(window.board, Qt.Key.Key_R)
+
+    command = window.session.history.commands[-1]
+    assert command.circle == 3
+    assert command.direction is TurnDirection.COUNTERCLOCKWISE
+    window.board.cancel_transients()
+    window.session.mark_saved()
+    window.close()
+
+
+def test_triple_trilotica_shortcuts_follow_the_physical_circle_layout():
+    window = GameWindow(GameSession("triple-trilotica"))
+
+    window.show()
+    window.board.setFocus()
+    for key, circle in (
+        (Qt.Key.Key_Q, 2),
+        (Qt.Key.Key_W, 0),
+        (Qt.Key.Key_E, 1),
+        (Qt.Key.Key_R, 3),
+    ):
+        QTest.keyClick(window.board, key)
+
+        assert window.session.history.commands[-1].circle == circle
+        window.board.cancel_transients()
+    window.session.mark_saved()
+    window.close()
+
+
 def test_renderer_palette_covers_every_domain_color():
     assert set(PIECE_PALETTE) == set(ColorId)
 

@@ -2,16 +2,9 @@ import pytest
 
 from game.domain.moves import TurnCommand, TurnDirection
 from game.domain.rules import DomainError
-from game.puzzles.registry import available_puzzles, get_puzzle
+from game.puzzles.registry import get_puzzle
 
 PUZZLE = get_puzzle("trilotica-v2")
-
-
-def test_trilotica_v2_is_listed_directly_after_trilotica():
-    puzzle_ids = [descriptor.puzzle_id for descriptor in available_puzzles()]
-
-    assert puzzle_ids.index("trilotica-v2") == puzzle_ids.index("trilotica") + 1
-
 
 def test_central_triangles_have_a_type_distinct_from_large_cut_out_triangles():
     assert PUZZLE.slot_kind(1) == "triangle"

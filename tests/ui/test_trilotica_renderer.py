@@ -5,7 +5,17 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 from PyQt6.QtCore import QPointF
 
 from game.puzzles.registry import get_renderer
-from game.puzzles.trilotica.renderer import TriLoticaGeometry
+from game.puzzles.trilotica.renderer import (
+    MultiTriLoticaGeometry,
+    MultiTriLoticaRenderer,
+    TriLoticaGeometry,
+    TriLoticaRenderer,
+)
+
+
+def test_trilotica_uses_the_shared_multi_disk_geometry_and_renderer():
+    assert isinstance(TriLoticaGeometry(), MultiTriLoticaGeometry)
+    assert isinstance(TriLoticaRenderer(), MultiTriLoticaRenderer)
 
 
 def test_trilotica_centers_are_one_radius_apart():

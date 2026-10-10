@@ -148,10 +148,11 @@ class GameBoardWidget(QWidget):
             self.update()
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
+        shortcut_circles = self._renderer.shortcut_circles()
         circles_by_key = {
-            Qt.Key.Key_Q: 0,
-            Qt.Key.Key_W: 1,
-            Qt.Key.Key_E: 2,
+            key: shortcut_circles[index]
+            for index, key in enumerate((Qt.Key.Key_Q, Qt.Key.Key_W, Qt.Key.Key_E, Qt.Key.Key_R))
+            if index < len(shortcut_circles)
         }
         circle = circles_by_key.get(event.key())
         if circle is not None and circle < self._circle_count and event.modifiers() in (

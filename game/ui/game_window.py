@@ -410,10 +410,11 @@ class GameWindow(QMainWindow):
 
 
     def _show_controls(self) -> None:
-        keys = ("Q", "W", "E")[: self.session.puzzle.circle_count]
+        keys = ("Q", "W", "E", "R")[: self.session.puzzle.circle_count]
         shortcut_keys = " / ".join(keys)
         shifted_shortcut_keys = " / ".join(f"Shift+{key}" for key in keys)
-        circles = " / ".join(str(index) for index in range(1, self.session.puzzle.circle_count + 1))
+        labels = get_renderer(self.session.puzzle.puzzle_id).shortcut_labels()
+        circles = " / ".join(labels)
         QMessageBox.information(
             self,
             self.tr("Controls"),
@@ -436,7 +437,8 @@ class GameWindow(QMainWindow):
             self.tr("About Puzzle World"),
             self.tr(
                 "Puzzle World\n\nA desktop collection of colorful mechanical puzzles.\n"
-                "This version includes Looper, Super Looper, Hyper Looper, TriLotica, TriLotica v2, Lotica, and Lemons."
+                "This version includes Looper, Super Looper, Hyper Looper, TriLotica, TriLotica v2, "
+                "Double TriLotica, Triple TriLotica, Lotica, and Lemons."
             ),
         )
 

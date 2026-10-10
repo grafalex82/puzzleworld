@@ -36,6 +36,19 @@ truncated lenses to the left disk; turn steps remain 120 degrees on the left and
 
 ![Solved TriLotica v2 puzzle](docs/screenshots/trilotica-v2.png)
 
+### Double TriLotica and Triple TriLotica
+
+TriLotica variants with two or three right-hand disks around the same central
+120-degree disk. The centre turns by 120 degrees; every outer disk turns by 180 degrees.
+
+#### Double TriLotica
+
+![Solved Double TriLotica puzzle](docs/screenshots/double-trilotica.png)
+
+#### Triple TriLotica
+
+![Solved Triple TriLotica puzzle](docs/screenshots/triple-trilotica.png)
+
 ### Lotica
 
 Two circles one radius apart: the left disk cycles four lenses and four curved triangles by 90 degrees, while the right disk swaps two lens-and-triangle sets with a half-turn.

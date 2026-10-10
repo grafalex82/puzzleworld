@@ -102,6 +102,14 @@ class LooperRenderer:
         return QRectF(self._bounds)
 
 
+    def shortcut_circles(self) -> tuple[int, ...]:
+        return (0, 1, 2)
+
+
+    def shortcut_labels(self) -> tuple[str, ...]:
+        return ("1", "2", "3")
+
+
     def hit_test_circle(self, point: QPointF) -> int | None:
         """Return the nearest circle containing a point, if any."""
         candidates: list[tuple[float, int]] = []
