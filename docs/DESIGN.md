@@ -4,7 +4,7 @@
 
 - **Puzzle definition**: pure rules for one puzzle family. It creates and validates states, applies commands, and recognizes solved states.
 - **Board state**: an immutable ordered collection of pieces for one puzzle.
-- **Piece**: an immutable `ColorId` and optional orientation. Its kind comes from the board position.
+- **Piece**: an immutable flat `ColorId` or ordered compound color tuple, plus optional orientation. Its kind comes from the board position.
 - **Turn command**: an immutable request containing a puzzle id, circle index, and direction.
 - **Session**: application state around a puzzle: mode, history, move count, dirty state, and solving lifecycle.
 - **Scramble**: a reproducible scenario that applies generated turns without adding them to user history, then starts a solving game.
@@ -71,6 +71,19 @@ disks removed. It is gray renderer-only decoration: it rotates during the centra
 turn but is not stored in the board state. Pieces have no orientation. A finish has
 one uniform colour in every small disk, in any permutation of blue, red, and yellow.
 
+## Trinita v2 rules
+
+Trinita v2 uses exactly the same four 120-degree disks, paths, slot cycles, and
+hit targets as Trinita. Its 21 small-disk cells are joined by an oriented central
+cross in the large disk. Lenses are single-colour and pieces with the same lens
+colour are interchangeable. Curved triangles are ordered two-colour pieces;
+reversing the same pair makes a different piece. The central triangles and cross
+are three-colour pieces. Every oriented piece advances by 120 degrees when its
+owning disk turns, including a central triangle that stays in the same slot.
+
+The canonical reference arrangement is accepted together with its two rotations
+of the complete triangular board. Those are the only three solved states.
+
 ## Domain invariants
 
 1. States and commands are immutable.
@@ -82,7 +95,7 @@ one uniform colour in every small disk, in any permutation of blue, red, and yel
 7. Solved means exact equality with the definition's canonical solved state, including small-piece orientation.
 8. Random scrambles accept an explicit seed and never write into user undo history.
 9. A failed validation or load leaves the live session unchanged.
-10. Domain colors use the bounded `ColorId` enum. Concrete display values belong only to renderers.
+10. Domain colors use the bounded `ColorId` enum; compound stickers use ordered tuples of those colors. Concrete display values belong only to renderers.
 
 ## Session rules
 

@@ -43,6 +43,14 @@ the three completed colour groups may occupy any disks.
 
 ![Solved Trinita puzzle](docs/screenshots/trinita.png)
 
+### Trinita v2
+
+Trinita's same four-circle mechanism with multicolour pieces. Curved triangles,
+the three central triangles, and the central cross carry a 120-degree orientation;
+the reference assembly and its two whole-board rotations are valid finishes.
+
+![Solved Trinita v2 puzzle](docs/screenshots/trinita-v2.png)
+
 ### Double TriLotica and Triple TriLotica
 
 TriLotica variants with two or three right-hand disks around the same central
@@ -106,6 +114,7 @@ game/
 │   ├── trilotica/          TriLotica model and its independent Qt renderer
 │   ├── trilotica_v2/       TriLotica v2 model and its independent Qt renderer
 │   ├── trinita/            Trinita model and its independent Qt renderer
+│   ├── trinita_v2/         Oriented multicolour Trinita model and renderer
 │   ├── lotica/             Lotica model and its independent Qt renderer
 │   ├── lemons/             Lemons model and its independent Qt renderer
 │   └── registry.py         Implemented and planned puzzle registry

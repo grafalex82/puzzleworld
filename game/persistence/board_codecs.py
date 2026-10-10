@@ -33,7 +33,11 @@ def encode_board(puzzle_id: str, board: BoardState) -> dict[str, Any]:
     return {
         "pieces": [
             {
-                "color": piece.color_id.value,
+                "color": (
+                    piece.color_id.value
+                    if isinstance(piece.color_id, ColorId)
+                    else [color.value for color in piece.color_id]
+                ),
                 "orientation": (
                     None if piece.orientation is None else piece.orientation.value
                 ),
@@ -78,12 +82,11 @@ def _decode_compact_board(
         if not isinstance(item, dict):
             raise BoardCodecError(f"board.pieces[{index}] must be an object.")
         _require_exact_keys(item, {"color", "orientation"}, f"piece {index}")
-        try:
-            color_id = ColorId(item["color"])
-        except (TypeError, ValueError) as error:
+        color_id = _decode_piece_id(item["color"])
+        if color_id is None:
             raise BoardCodecError(
                 f"Piece {index} has an unknown color identifier."
-            ) from error
+            )
         orientation = _decode_orientation(item["orientation"], index)
 
         pieces.append(Piece(color_id, orientation))
@@ -97,3 +100,16 @@ def _decode_orientation(value: Any, index: int) -> Orientation | None:
         return Orientation(value)
     except (TypeError, ValueError) as error:
         raise BoardCodecError(f"Piece {index} has an invalid orientation.") from error
+
+
+def _decode_piece_id(value: Any) -> ColorId | tuple[ColorId, ...] | None:
+    """Decode a flat color or an ordered compound sticker color tuple."""
+    if isinstance(value, list):
+        try:
+            return tuple(ColorId(color) for color in value)
+        except (TypeError, ValueError):
+            return None
+    try:
+        return ColorId(value)
+    except (TypeError, ValueError):
+        return None

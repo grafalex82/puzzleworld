@@ -14,6 +14,7 @@ ORIENTATION_MARKER_FILL_COLOR = "#1a1d20"
 TRANSPARENT_COLOR = QColor(0, 0, 0, 0)
 
 PIECE_PALETTE = {
+    ColorId.WHITE: "#fafcff",
     ColorId.RED: "#e53935",
     ColorId.ORANGE: "#ff6d00",
     ColorId.YELLOW: "#fdd835",

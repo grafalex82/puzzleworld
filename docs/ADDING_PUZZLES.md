@@ -23,8 +23,10 @@ Use these rules when designing the model:
   for every kind, so a lens cannot silently become a triangle just because the
   overall color counts still match.
 - Use `ColorId` and, where needed, `Orientation` from `game.domain.state`.
-  Add a new domain color only when it is a stable logical color; display values
-  belong in `game.puzzles.colors`, never in the model or save data.
+  Use an ordered `tuple[ColorId, ...]` for an inseparable compound sticker
+  rather than borrowing an unrelated flat color as its identity. Add a new
+  domain color only when it is stable logical state; display values belong in
+  `game.puzzles.colors`, never in the model or save data.
 - Treat decorative gaps, fixed backgrounds, and renderer-only cut-outs as
   renderer state, not logical pieces. Compound artwork that always moves as one
   piece still has one logical slot.
