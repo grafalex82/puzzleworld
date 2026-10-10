@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 
-from game.domain.state import BoardState, Orientation, Piece
+from game.domain.state import BoardState, Piece
 from game.puzzles.colors import (
     EMPTY_PIECE_COLOR,
     FRAME_BORDER_COLOR,
@@ -258,23 +258,23 @@ class HyperLooperRenderer:
             painter.drawEllipse(marker, 0.11 * unit, 0.11 * unit)
 
 
-    def _marker_position(self, path: QPainterPath, orientation: Orientation, slot: int) -> QPointF:
+    def _marker_position(self, path: QPainterPath, orientation: int, slot: int) -> QPointF:
         """Return a marker location inside the appropriate oriented region."""
         if HyperLooperPuzzle.slot_kind(slot) == "large_diamond":
             components = [polygon.boundingRect() for polygon in path.toFillPolygons()]
             component = (
                 min(components, key=lambda bounds: bounds.center().y())
-                if orientation is Orientation.UP
+                if orientation == 0
                 else max(components, key=lambda bounds: bounds.center().y())
             )
             offset = 0.12 * component.height()
-            marker_y = component.center().y() - offset if orientation is Orientation.UP else component.center().y() + offset
+            marker_y = component.center().y() - offset if orientation == 0 else component.center().y() + offset
             return QPointF(component.center().x(), marker_y)
 
         bounds = path.boundingRect()
         marker_y = (
             bounds.top() + 0.24 * bounds.height()
-            if orientation is Orientation.UP
+            if orientation == 0
             else bounds.bottom() - 0.24 * bounds.height()
         )
         return QPointF(bounds.center().x(), marker_y)

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from game.domain.moves import TurnCommand
 from game.domain.rules import DomainError
-from game.domain.state import BoardState, ColorId, Orientation, Piece
+from game.domain.state import BoardState, ColorId, Piece
 
 
 class HyperLooperPuzzle:
@@ -76,7 +76,7 @@ class HyperLooperPuzzle:
         oriented_kinds = {"lens", "large_diamond"}
         return BoardState(
             tuple(
-                Piece(color_id, Orientation.UP if kind in oriented_kinds else None)
+                Piece(color_id, 0 if kind in oriented_kinds else None)
                 for color_id, kind in self._specs
             )
         )
@@ -91,8 +91,11 @@ class HyperLooperPuzzle:
         oriented_kinds = {"lens", "large_diamond"}
         for slot, piece in enumerate(state.pieces):
             piece_kind = self.slot_kind(slot)
-            if piece_kind in oriented_kinds and piece.orientation is None:
-                raise DomainError("This Hyper Looper shape requires an orientation.")
+            if (
+                piece_kind in oriented_kinds
+                and (type(piece.orientation) is not int or piece.orientation not in {0, 180})
+            ):
+                raise DomainError("This Hyper Looper shape requires a half-turn orientation.")
             if piece_kind not in oriented_kinds and piece.orientation is not None:
                 raise DomainError("This Hyper Looper shape cannot have an orientation.")
         self._validate_color_inventory(state)
@@ -111,8 +114,8 @@ class HyperLooperPuzzle:
 
         pieces = list(state.pieces)
         for first, second in self._turn_mappings[command.circle]:
-            pieces[first] = state.pieces[second].flipped()
-            pieces[second] = state.pieces[first].flipped()
+            pieces[first] = state.pieces[second].rotated(180)
+            pieces[second] = state.pieces[first].rotated(180)
         result = BoardState(tuple(pieces))
         self.validate_state(result)
         return result

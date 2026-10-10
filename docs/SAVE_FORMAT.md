@@ -13,7 +13,7 @@ Puzzle World saves are UTF-8 JSON. Version 1 has this shape:
   "final_move_count": null,
   "board": {
     "pieces": [
-      {"color": "red", "orientation": "up"}
+      {"color": "red", "orientation": 0}
     ]
   }
 }
@@ -21,7 +21,7 @@ Puzzle World saves are UTF-8 JSON. Version 1 has this shape:
 
 All documented fields are required. `final_move_count` is either a non-negative integer or `null`. Additional top-level, board, or piece fields are rejected so corrupt or incompatible data cannot be silently accepted.
 
-Pieces have no identity beyond their position, color, and optional orientation. Looper position determines the piece geometry: using one-based numbering, odd positions are small and even positions are large. Color values are stable identifiers from the domain `ColorId` enum, never renderer-specific RGB or HEX values. Small pieces store `up` or `down`; large pieces store `null` orientation.
+Pieces have no identity beyond their position, color, and optional orientation. Orientation is an integer number of clockwise degrees from the normal position, with `0` representing normal. Looper position determines the piece geometry: using one-based numbering, odd positions are small and even positions are large. Color values are stable identifiers from the domain `ColorId` enum, never renderer-specific RGB or HEX values. Small pieces store `0` or `180`; large pieces store `null` orientation.
 
 History and scramble provenance (difficulty, generated turns, and seed) are intentionally not saved. After loading, undo and redo are empty. `format` prevents unrelated JSON from being mistaken for a save; `version` controls future migrations. During pre-release development the compact schema remains version 1. Unknown versions are rejected instead of guessed.
 

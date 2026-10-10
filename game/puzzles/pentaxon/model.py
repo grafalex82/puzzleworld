@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from game.domain.moves import TurnCommand
 from game.domain.rules import DomainError
-from game.domain.state import BoardState, ColorId, Orientation, Piece
+from game.domain.state import BoardState, ColorId, Piece
 
 ColorPair = tuple[ColorId, ColorId]
 PieceColor = ColorId | ColorPair
@@ -23,13 +23,7 @@ class MultiPentaxonPuzzle:
     center_offset = 10
     large_disk_offsets = (0, 1, 4, 5, 6, 8, 9, 10)
 
-    _center_orientations = (
-        Orientation.UP,
-        Orientation.ROTATED_72,
-        Orientation.ROTATED_144,
-        Orientation.ROTATED_216,
-        Orientation.ROTATED_288,
-    )
+    _center_orientations = (0, 72, 144, 216, 288)
 
     def __init__(self) -> None:
         self.circle_count = len(self.color_pairs) + 1
@@ -69,7 +63,7 @@ class MultiPentaxonPuzzle:
     def solved_state(self) -> BoardState:
         pieces = []
         for color, kind in self._specs:
-            orientation = Orientation.UP if kind == "pentagon" else None
+            orientation = 0 if kind == "pentagon" else None
             pieces.append(Piece(color, orientation))
         return BoardState(tuple(pieces))
 
@@ -82,7 +76,7 @@ class MultiPentaxonPuzzle:
             )
         for slot, piece in enumerate(state.pieces):
             if self.slot_kind(slot) == "pentagon":
-                if piece.orientation not in self._center_orientations:
+                if type(piece.orientation) is not int or piece.orientation not in self._center_orientations:
                     raise DomainError(f"{self.display_name} pentagons need a five-way orientation.")
             elif piece.orientation is not None:
                 raise DomainError(f"{self.display_name} triangles cannot have an orientation.")
@@ -116,7 +110,7 @@ class MultiPentaxonPuzzle:
             self._cycle(state.pieces, pieces, group[:5], offset)
             self._cycle(state.pieces, pieces, group[5:10], offset)
             center_slot = group[self.center_offset]
-            pieces[center_slot] = state.pieces[center_slot].rotated_fifth(offset)
+            pieces[center_slot] = state.pieces[center_slot].rotated(offset * 72)
 
         result = BoardState(tuple(pieces))
         self.validate_state(result)
@@ -127,7 +121,7 @@ class MultiPentaxonPuzzle:
         seen_pairs: set[ColorPair] = set()
         for group in self._group_slots:
             center = state.pieces[group[self.center_offset]]
-            if not isinstance(center.color_id, tuple) or center.orientation is not Orientation.UP:
+            if not isinstance(center.color_id, tuple) or center.orientation != 0:
                 return False
             colors = center.color_id
             if colors not in self.color_pairs or colors in seen_pairs:

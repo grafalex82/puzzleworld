@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 
-from game.domain.state import BoardState, Orientation, Piece
+from game.domain.state import BoardState, Piece
 from game.puzzles.colors import (
     FRAME_BORDER_COLOR,
     FRAME_FILL_COLOR,
@@ -211,19 +211,8 @@ class MultiPentaxonRenderer:
         elif local_slot < 10:
             angle = axis + (local_slot - 7) * 72.0
         else:
-            angle = axis + self._fifth_orientation_steps(piece.orientation) * 72.0
+            angle = axis + (piece.orientation or 0)
         return self._positive_half_plane(self.geometry.circle_centers[group + 1], angle)
-
-    @staticmethod
-    def _fifth_orientation_steps(orientation: Orientation | None) -> int:
-        orientations = (
-            Orientation.UP,
-            Orientation.ROTATED_72,
-            Orientation.ROTATED_144,
-            Orientation.ROTATED_216,
-            Orientation.ROTATED_288,
-        )
-        return orientations.index(orientation) if orientation in orientations else 0
 
     @staticmethod
     def _positive_half_plane(center: tuple[float, float], axis: float) -> QPainterPath:

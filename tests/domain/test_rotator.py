@@ -3,7 +3,7 @@ import pytest
 from game.application.session import GameSession
 from game.domain.moves import TurnCommand, TurnDirection
 from game.domain.rules import DomainError
-from game.domain.state import BoardState, ColorId, Orientation, Piece
+from game.domain.state import BoardState, ColorId, Piece
 from game.persistence.game_state import GameState, load_game, save_game
 from game.puzzles.rotator.model import RotatorPuzzle
 
@@ -30,8 +30,8 @@ def test_turn_cycles_three_lenses_and_rotates_the_fixed_centre():
     assert after.pieces[0].color_id == before.pieces[6].color_id
     assert after.pieces[5].color_id == before.pieces[0].color_id
     assert after.pieces[12].color_id == before.pieces[12].color_id
-    assert after.pieces[12].orientation is Orientation.ROTATED_120
-    assert after.pieces[0].orientation is Orientation.ROTATED_120
+    assert after.pieces[12].orientation == 120
+    assert after.pieces[0].orientation == 120
 
 
 def test_lens_colour_order_makes_every_piece_distinct():
@@ -59,7 +59,7 @@ def test_solved_colours_follow_the_clockwise_reference_and_adjacent_centres():
 
 def test_rotator_rejects_half_turn_orientations_and_wrong_circle():
     pieces = list(PUZZLE.solved_state().pieces)
-    pieces[0] = Piece(pieces[0].color_id, Orientation.DOWN)
+    pieces[0] = Piece(pieces[0].color_id, 180)
 
     with pytest.raises(DomainError, match="three-way orientation"):
         PUZZLE.validate_state(BoardState(tuple(pieces)))

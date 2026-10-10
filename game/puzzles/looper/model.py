@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from game.domain.moves import TurnCommand
 from game.domain.rules import DomainError
-from game.domain.state import BoardState, ColorId, Orientation, Piece
+from game.domain.state import BoardState, ColorId, Piece
 
 
 class LooperPuzzle:
@@ -48,7 +48,7 @@ class LooperPuzzle:
         """Build the canonical Looper arrangement."""
         return BoardState(
             tuple(
-                Piece(color_id, Orientation.UP if self.is_small_piece(slot) else None)
+                Piece(color_id, 0 if self.is_small_piece(slot) else None)
                 for slot, color_id in enumerate(self._colors)
             )
         )
@@ -60,8 +60,11 @@ class LooperPuzzle:
         if len(state.pieces) != len(self._colors):
             raise DomainError("Looper state must contain exactly 9 pieces.")
         for slot, piece in enumerate(state.pieces):
-            if self.is_small_piece(slot) and piece.orientation is None:
-                raise DomainError("Small Looper pieces require an orientation.")
+            if (
+                self.is_small_piece(slot)
+                and (type(piece.orientation) is not int or piece.orientation not in {0, 180})
+            ):
+                raise DomainError("Small Looper pieces require a half-turn orientation.")
             if self.is_large_piece(slot) and piece.orientation is not None:
                 raise DomainError("Large Looper pieces cannot have an orientation.")
         self._validate_color_inventory(state)
@@ -80,7 +83,7 @@ class LooperPuzzle:
 
         start = command.circle * 2
         end = start + self.circle_element_count
-        turned = tuple(piece.flipped() for piece in reversed(state.pieces[start:end]))
+        turned = tuple(piece.rotated(180) for piece in reversed(state.pieces[start:end]))
         result = BoardState(state.pieces[:start] + turned + state.pieces[end:])
         self.validate_state(result)
         return result

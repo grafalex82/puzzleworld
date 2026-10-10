@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from game.domain.rules import PuzzleDefinition
-from game.domain.state import BoardState, ColorId, Orientation, Piece
+from game.domain.state import BoardState, ColorId, Piece
 from game.puzzles.registry import get_puzzle
 
 
@@ -38,9 +38,7 @@ def encode_board(puzzle_id: str, board: BoardState) -> dict[str, Any]:
                     if isinstance(piece.color_id, ColorId)
                     else [color.value for color in piece.color_id]
                 ),
-                "orientation": (
-                    None if piece.orientation is None else piece.orientation.value
-                ),
+                "orientation": piece.orientation,
             }
             for piece in board.pieces
         ]
@@ -93,13 +91,12 @@ def _decode_compact_board(
     return BoardState(tuple(pieces))
 
 
-def _decode_orientation(value: Any, index: int) -> Orientation | None:
+def _decode_orientation(value: Any, index: int) -> int | None:
     if value is None:
         return None
-    try:
-        return Orientation(value)
-    except (TypeError, ValueError) as error:
-        raise BoardCodecError(f"Piece {index} has an invalid orientation.") from error
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise BoardCodecError(f"Piece {index} has an invalid orientation.")
+    return value
 
 
 def _decode_piece_id(value: Any) -> ColorId | tuple[ColorId, ...] | None:

@@ -22,8 +22,9 @@ Use these rules when designing the model:
 - A slot's geometric kind never changes. Validate the color inventory separately
   for every kind, so a lens cannot silently become a triangle just because the
   overall color counts still match.
-- Use `ColorId` and, where needed, `Orientation` from `game.domain.state`.
-  Use an ordered `tuple[ColorId, ...]` for an inseparable compound sticker
+- Use `ColorId` and, where needed, an integer orientation in clockwise degrees
+  from normal (`0` is normal) from `game.domain.state`. Use an ordered
+  `tuple[ColorId, ...]` for an inseparable compound sticker
   rather than borrowing an unrelated flat color as its identity. Add a new
   domain color only when it is stable logical state; display values belong in
   `game.puzzles.colors`, never in the model or save data.

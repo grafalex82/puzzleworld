@@ -2,7 +2,7 @@ import pytest
 
 from game.domain.moves import TurnCommand, TurnDirection
 from game.domain.rules import DomainError
-from game.domain.state import ColorId, Orientation
+from game.domain.state import ColorId
 from game.puzzles.registry import get_puzzle
 
 PUZZLE = get_puzzle("hyper-looper")
@@ -28,7 +28,7 @@ def test_turn_moves_fourteen_pieces_and_flips_only_oriented_piece_kinds(circle):
         if slot not in affected:
             assert after == before
         elif after.orientation is not None:
-            assert after.orientation is Orientation.DOWN
+            assert after.orientation == 180
 
 
 def test_hyper_looper_has_all_requested_piece_families_and_light_gray_final_lens():

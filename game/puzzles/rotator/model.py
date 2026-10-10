@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from game.domain.moves import TurnCommand
 from game.domain.rules import DomainError
-from game.domain.state import BoardState, ColorId, Orientation, Piece
+from game.domain.state import BoardState, ColorId, Piece
 
 
 class RotatorPuzzle:
@@ -15,11 +15,7 @@ class RotatorPuzzle:
     circle_count = 6
     lens_count = 12
     piece_count = 18
-    _third_orientations = frozenset({
-        Orientation.UP,
-        Orientation.ROTATED_120,
-        Orientation.ROTATED_240,
-    })
+    _third_orientations = frozenset({0, 120, 240})
 
     # Slots 0..5 are the shared lenses, ordered clockwise around the board.
     # Slots 6..11 are the edge lenses, one per disk.  Slots 12..17 are the
@@ -52,7 +48,7 @@ class RotatorPuzzle:
 
     def solved_state(self) -> BoardState:
         return BoardState(
-            tuple(Piece(colors, Orientation.UP) for colors, _ in self._specs)
+            tuple(Piece(colors, 0) for colors, _ in self._specs)
         )
 
     def validate_state(self, state: BoardState) -> None:
@@ -68,7 +64,7 @@ class RotatorPuzzle:
                 or not all(isinstance(color, ColorId) for color in piece.color_id)
             ):
                 raise DomainError("Rotator pieces require ordered compound colours.")
-            if piece.orientation not in self._third_orientations:
+            if type(piece.orientation) is not int or piece.orientation not in self._third_orientations:
                 raise DomainError("Rotator pieces require a three-way orientation.")
         self._validate_inventory(state)
 
@@ -88,7 +84,7 @@ class RotatorPuzzle:
         edge = self.circle_count + command.circle
         self._cycle(state.pieces, pieces, (outer_before, edge, outer_after), step)
         for slot in (outer_before, edge, outer_after, self.lens_count + command.circle):
-            pieces[slot] = pieces[slot].rotated_third(step)
+            pieces[slot] = pieces[slot].rotated(step * 120)
 
         result = BoardState(tuple(pieces))
         self.validate_state(result)

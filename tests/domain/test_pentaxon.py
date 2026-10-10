@@ -2,7 +2,7 @@ import pytest
 
 from game.domain.moves import TurnCommand, TurnDirection
 from game.domain.rules import DomainError
-from game.domain.state import BoardState, Orientation, Piece
+from game.domain.state import BoardState, Piece
 from game.puzzles.registry import get_puzzle
 
 
@@ -29,7 +29,7 @@ def test_small_pentaxon_turn_has_order_five_and_rotates_its_center(puzzle_id, ci
 
     assert once.pieces[(circle - 1) * 11 + 1] == before.pieces[(circle - 1) * 11]
     assert once.pieces[(circle - 1) * 11 + 6] == before.pieces[(circle - 1) * 11 + 5]
-    assert once.pieces[(circle - 1) * 11 + 10].orientation is Orientation.ROTATED_72
+    assert once.pieces[(circle - 1) * 11 + 10].orientation == 72
 
     state = before
     for _ in range(5):
@@ -59,7 +59,7 @@ def test_pentaxon_accepts_complete_color_groups_in_any_small_circle(puzzle_id):
 def test_tri_pentaxon_requires_the_five_way_pentagon_orientation():
     puzzle = get_puzzle("tri-pentaxon")
     pieces = list(puzzle.solved_state().pieces)
-    pieces[10] = Piece(pieces[10].color_id, Orientation.ROTATED_72)
+    pieces[10] = Piece(pieces[10].color_id, 72)
 
     assert not puzzle.is_solved(BoardState(tuple(pieces)))
 
@@ -71,6 +71,6 @@ def test_pentaxon_rejects_invalid_circle_and_triangle_orientation(puzzle_id):
         puzzle.apply(puzzle.solved_state(), TurnCommand(puzzle_id, puzzle.circle_count))
 
     pieces = list(puzzle.solved_state().pieces)
-    pieces[0] = Piece(pieces[0].color_id, Orientation.UP)
+    pieces[0] = Piece(pieces[0].color_id, 0)
     with pytest.raises(DomainError):
         puzzle.validate_state(BoardState(tuple(pieces)))

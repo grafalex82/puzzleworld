@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from game.domain.moves import TurnCommand
 from game.domain.rules import DomainError
-from game.domain.state import BoardState, ColorId, Orientation, Piece
+from game.domain.state import BoardState, ColorId, Piece
 
 
 class TrinitaV2Puzzle:
@@ -23,11 +23,7 @@ class TrinitaV2Puzzle:
     _triangle_offsets = (3, 4, 5)
     _large_disk_offsets = (0, 2, 3, 6)
     _cross_slot = 21
-    _third_orientations = {
-        Orientation.UP,
-        Orientation.ROTATED_120,
-        Orientation.ROTATED_240,
-    }
+    _third_orientations = {0, 120, 240}
 
     # Compound stickers retain their visible colors in drawing order.
     _specs = (
@@ -56,7 +52,7 @@ class TrinitaV2Puzzle:
         """Build the photographed white/red/yellow/blue reference assembly."""
         return BoardState(
             tuple(
-                Piece(color, None if kind == "lens" else Orientation.UP)
+                Piece(color, None if kind == "lens" else 0)
                 for color, kind in self._specs
             )
         )
@@ -81,7 +77,7 @@ class TrinitaV2Puzzle:
                 or not all(isinstance(color, ColorId) for color in piece.color_id)
             ):
                 raise DomainError("Trinita v2 compound pieces require their ordered colors.")
-            if piece.orientation not in self._third_orientations:
+            if type(piece.orientation) is not int or piece.orientation not in self._third_orientations:
                 raise DomainError("Trinita v2 oriented pieces require a three-way orientation.")
         self._validate_inventory(state)
 
@@ -116,7 +112,7 @@ class TrinitaV2Puzzle:
         # Every non-lens element physically turns with its disk, including the
         # small disk's stationary central triangle and the central cross.
         for slot in affected:
-            pieces[slot] = pieces[slot].rotated_third(step)
+            pieces[slot] = pieces[slot].rotated(step * 120)
         result = BoardState(tuple(pieces))
         self.validate_state(result)
         return result
@@ -136,8 +132,8 @@ class TrinitaV2Puzzle:
             for group_index, group in enumerate(self._group_slots):
                 destination = self._group_slots[(group_index + step) % 3]
                 for source_slot, destination_slot in zip(group, destination):
-                    pieces[destination_slot] = reference.pieces[source_slot].rotated_third(step)
-            pieces[self._cross_slot] = reference.pieces[self._cross_slot].rotated_third(step)
+                    pieces[destination_slot] = reference.pieces[source_slot].rotated(step * 120)
+            pieces[self._cross_slot] = reference.pieces[self._cross_slot].rotated(step * 120)
             variants.append(BoardState(tuple(pieces)))
         return tuple(variants)
 

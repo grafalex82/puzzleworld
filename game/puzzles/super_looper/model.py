@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from game.domain.moves import TurnCommand
 from game.domain.rules import DomainError
-from game.domain.state import BoardState, ColorId, Orientation, Piece
+from game.domain.state import BoardState, ColorId, Piece
 
 
 class SuperLooperPuzzle:
@@ -59,7 +59,7 @@ class SuperLooperPuzzle:
         """Build the canonical Super Looper arrangement."""
         return BoardState(
             tuple(
-                Piece(color_id, Orientation.UP if kind == "vertical" else None)
+                Piece(color_id, 0 if kind == "vertical" else None)
                 for color_id, kind in self._specs
             )
         )
@@ -73,9 +73,12 @@ class SuperLooperPuzzle:
 
         for slot, piece in enumerate(state.pieces):
             piece_kind = self.slot_kind(slot)
-            if piece_kind == "vertical" and piece.orientation is None:
+            if (
+                piece_kind == "vertical"
+                and (type(piece.orientation) is not int or piece.orientation not in {0, 180})
+            ):
                 raise DomainError(
-                    "Vertical Super Looper pieces require an orientation."
+                    "Vertical Super Looper pieces require a half-turn orientation."
                 )
             if piece_kind != "vertical" and piece.orientation is not None:
                 raise DomainError(
@@ -98,7 +101,7 @@ class SuperLooperPuzzle:
         slots = self.circle_slots[command.circle]
         pieces = list(state.pieces)
         for destination, source in zip(slots, reversed(slots)):
-            pieces[destination] = state.pieces[source].flipped()
+            pieces[destination] = state.pieces[source].rotated(180)
         result = BoardState(tuple(pieces))
         self.validate_state(result)
         return result

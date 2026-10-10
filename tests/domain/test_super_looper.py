@@ -2,7 +2,6 @@ import pytest
 
 from game.domain.moves import TurnCommand, TurnDirection
 from game.domain.rules import DomainError
-from game.domain.state import Orientation
 from game.puzzles.registry import get_puzzle
 
 PUZZLE = get_puzzle("super-looper")
@@ -27,7 +26,7 @@ def test_turn_moves_nine_pieces_and_flips_only_vertical_markers(circle):
     for destination, source in zip(slots, reversed(slots)):
         assert turned.pieces[destination].color_id == solved.pieces[source].color_id
         if turned.pieces[destination].orientation is not None:
-            assert turned.pieces[destination].orientation is Orientation.DOWN
+            assert turned.pieces[destination].orientation == 180
 
 
 def test_super_looper_rejects_a_circle_outside_the_three_circle_board():

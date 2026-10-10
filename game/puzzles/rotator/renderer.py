@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 
-from game.domain.state import BoardState, ColorId, Orientation, Piece
+from game.domain.state import BoardState, ColorId, Piece
 from game.puzzles.colors import (
     FRAME_BORDER_COLOR,
     FRAME_FILL_COLOR,
@@ -276,12 +276,10 @@ class RotatorRenderer:
         return (second, first) if swap else (first, second)
 
     @staticmethod
-    def _orientation_step(orientation: Orientation | None) -> int:
-        return {
-            Orientation.UP: 0,
-            Orientation.ROTATED_120: 1,
-            Orientation.ROTATED_240: 2,
-        }[orientation]
+    def _orientation_step(orientation: int | None) -> int:
+        if orientation is None:
+            raise ValueError("Rotator pieces require an orientation.")
+        return orientation // 120
 
     @staticmethod
     def _half_plane(

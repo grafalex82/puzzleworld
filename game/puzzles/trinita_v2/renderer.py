@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 
-from game.domain.state import BoardState, ColorId, Orientation, Piece
+from game.domain.state import BoardState, ColorId, Piece
 from game.puzzles.colors import PIECE_PALETTE, PLAY_AREA_COLOR
 from game.puzzles.trinita.renderer import TrinitaGeometry, TrinitaRenderer
 from game.puzzles.trinita_v2.model import TrinitaV2Puzzle
@@ -138,14 +138,12 @@ class TrinitaV2Renderer(TrinitaRenderer):
         colours: tuple[ColorId, ColorId, ColorId],
         center: QPointF,
         first_corner_angle: float,
-        orientation: Orientation | None,
+        orientation: int | None,
     ) -> None:
         """Fill a three-colour element with rays that meet at its true centre."""
-        orientation_step = {
-            Orientation.UP: 0,
-            Orientation.ROTATED_120: 1,
-            Orientation.ROTATED_240: 2,
-        }[orientation]
+        if orientation is None:
+            raise ValueError("Trinita v2 oriented pieces require an orientation.")
+        orientation_step = orientation // 120
         extent = 5 * self.geometry.large_radius
         painter.save()
         painter.setClipPath(path)

@@ -2,7 +2,7 @@ import pytest
 
 from game.domain.moves import TurnCommand, TurnDirection
 from game.domain.rules import DomainError
-from game.domain.state import ColorId
+from game.domain.state import ColorId, Piece
 from game.puzzles.registry import get_puzzle
 
 PUZZLE = get_puzzle("looper")
@@ -27,13 +27,13 @@ def test_cyclic_sequence_returns_to_solved_state():
     assert PUZZLE.is_solved(state)
 
 
-def test_one_turn_is_not_solved_and_flips_small_orientation():
+def test_one_turn_is_not_solved_and_rotates_small_orientation_by_180_degrees():
     solved = PUZZLE.solved_state()
     turned = PUZZLE.apply(solved, TurnCommand("looper", 0))
 
     assert not PUZZLE.is_solved(turned)
     assert turned.pieces[0].color_id == solved.pieces[4].color_id
-    assert turned.pieces[0].orientation != solved.pieces[4].orientation
+    assert turned.pieces[0].orientation == 180
 
 
 def test_invalid_circle_is_rejected_without_mutating_state():
@@ -50,3 +50,10 @@ def test_piece_colors_use_bounded_domain_identifiers():
 
     assert len(ColorId) <= 10
     assert all(isinstance(piece.color_id, ColorId) for piece in state.pieces)
+
+
+def test_piece_rotation_uses_degrees_and_wraps_at_a_full_turn():
+    piece = Piece(ColorId.RED, 240)
+
+    assert piece.rotated(120).orientation == 0
+    assert piece.rotated(-60).orientation == 180

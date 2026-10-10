@@ -43,6 +43,7 @@ def test_current_save_contains_only_piece_color_and_orientation():
         set(piece) == {"color", "orientation"} for piece in data["board"]["pieces"]
     )
     assert data["board"]["pieces"][0]["color"] == "red"
+    assert data["board"]["pieces"][0]["orientation"] == 0
     assert not data["board"]["pieces"][0]["color"].startswith("#")
     assert "scramble" not in data
 

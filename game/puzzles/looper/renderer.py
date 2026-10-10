@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 
-from game.domain.state import BoardState, Orientation, Piece
+from game.domain.state import BoardState, Piece
 from game.puzzles.colors import (
     EMPTY_PIECE_COLOR,
     FRAME_BORDER_COLOR,
@@ -219,7 +219,7 @@ class LooperRenderer:
         painter.setPen(QPen(QColor(PLAY_AREA_COLOR), 0.09 * unit))
         painter.drawPath(path)
         if piece.orientation is not None:
-            marker_y = -0.58 * unit if piece.orientation is Orientation.UP else 0.58 * unit
+            marker_y = -0.58 * unit if piece.orientation == 0 else 0.58 * unit
             marker = QPointF(self.geometry.small_centers[slot // 2], marker_y)
             painter.setPen(QPen(QColor(ORIENTATION_MARKER_BORDER_COLOR), 0.04 * unit))
             painter.setBrush(QColor(ORIENTATION_MARKER_FILL_COLOR))

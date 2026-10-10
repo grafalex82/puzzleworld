@@ -2,7 +2,7 @@ import pytest
 
 from game.domain.moves import TurnCommand, TurnDirection
 from game.domain.rules import DomainError
-from game.domain.state import BoardState, ColorId, Orientation
+from game.domain.state import BoardState, ColorId
 from game.application.session import GameSession
 from game.persistence.game_state import GameState, load_game, save_game
 from game.puzzles.registry import get_puzzle
@@ -27,9 +27,9 @@ def test_small_turn_rotates_its_stationary_centre_and_moved_triangles():
     before = PUZZLE.solved_state()
     after = PUZZLE.apply(before, TurnCommand("trinita-v2", 1))
 
-    assert after.pieces[6].orientation is Orientation.ROTATED_120
+    assert after.pieces[6].orientation == 120
     assert after.pieces[4].color_id == before.pieces[3].color_id
-    assert after.pieces[4].orientation is Orientation.ROTATED_120
+    assert after.pieces[4].orientation == 120
 
 
 def test_lenses_put_white_at_the_three_outer_corners_and_match_inner_pairs():
@@ -65,9 +65,9 @@ def test_large_turn_rotates_its_cross_and_carried_triangle():
     before = PUZZLE.solved_state()
     after = PUZZLE.apply(before, TurnCommand("trinita-v2", 0))
 
-    assert after.pieces[21].orientation is Orientation.ROTATED_120
+    assert after.pieces[21].orientation == 120
     assert after.pieces[17].color_id == before.pieces[3].color_id
-    assert after.pieces[17].orientation is Orientation.ROTATED_120
+    assert after.pieces[17].orientation == 120
 
 
 def test_reference_and_its_two_global_rotations_are_solved():
@@ -90,7 +90,7 @@ def test_reversed_triangle_pair_is_not_interchangeable_in_a_solution():
 
 def test_oriented_v2_element_rejects_half_turn_orientation():
     pieces = list(PUZZLE.solved_state().pieces)
-    pieces[6] = pieces[6].__class__(pieces[6].color_id, Orientation.DOWN)
+    pieces[6] = pieces[6].__class__(pieces[6].color_id, 180)
 
     with pytest.raises(DomainError, match="three-way orientation"):
         PUZZLE.validate_state(BoardState(tuple(pieces)))

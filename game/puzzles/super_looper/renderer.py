@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from PyQt6.QtCore import QPointF, QRectF, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 
-from game.domain.state import BoardState, Orientation, Piece
+from game.domain.state import BoardState, Piece
 from game.puzzles.colors import (
     EMPTY_PIECE_COLOR,
     FRAME_BORDER_COLOR,
@@ -235,7 +235,7 @@ class SuperLooperRenderer:
             bounds = path.boundingRect()
             marker_y = (
                 bounds.top() + 0.24 * bounds.height()
-                if piece.orientation is Orientation.UP
+                if piece.orientation == 0
                 else bounds.bottom() - 0.24 * bounds.height()
             )
             marker = QPointF(bounds.center().x(), marker_y)
