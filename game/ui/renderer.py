@@ -17,12 +17,12 @@ class PuzzleRenderer(Protocol):
 
 
     def shortcut_circles(self) -> tuple[int, ...]:
-        """Return circle indices in Q/W/E/R shortcut order."""
+        """Return circle indices in the renderer's supported shortcut order."""
         ...
 
 
     def shortcut_labels(self) -> tuple[str, ...]:
-        """Return the user-facing labels for Q/W/E/R shortcuts."""
+        """Return user-facing labels matching ``shortcut_circles``."""
         ...
 
 

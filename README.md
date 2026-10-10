@@ -70,6 +70,14 @@ Two circles one radius apart: the left disk cycles four lenses and four curved t
 
 ![Solved Lotica puzzle](docs/screenshots/lotica.png)
 
+### Rotator
+
+Six disks sit around a fixed white hexagon. Each 120-degree turn cycles
+three unique two-colour lenses and rotates the three-colour centre at that disk.
+Restore every lens and centre orientation to its reference position.
+
+![Solved Rotator puzzle](docs/screenshots/rotator.png)
+
 ### Lemons
 
 A puzzle with a large circle and a small circle. The large disk turns by 90 degrees,
@@ -116,6 +124,7 @@ game/
 │   ├── trinita/            Trinita model and its independent Qt renderer
 │   ├── trinita_v2/         Oriented multicolour Trinita model and renderer
 │   ├── lotica/             Lotica model and its independent Qt renderer
+│   ├── rotator/            Six-disk oriented Rotator model and renderer
 │   ├── lemons/             Lemons model and its independent Qt renderer
 │   └── registry.py         Implemented and planned puzzle registry
 ├── application/            Sessions, game modes, history, and scrambles

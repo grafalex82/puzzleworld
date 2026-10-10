@@ -84,6 +84,17 @@ owning disk turns, including a central triangle that stays in the same slot.
 The canonical reference arrangement is accepted together with its two rotations
 of the complete triangular board. Those are the only three solved states.
 
+## Rotator rules
+
+Rotator has six equal disks of diameter 40. Their centres lie 26 units from the
+puzzle centre at 60-degree intervals, surrounding a fixed white hexagon. Each disk
+turns by 120 degrees. Its two lenses shared with neighbouring disks and its third,
+outward-facing edge lens cycle as a three-piece ring; all lenses are unique ordered
+two-colour pieces and their orientation advances with the turn. The disk's
+three-colour centre remains in its own position but also advances its orientation.
+The fixed central hexagon is the curved six-arc gap left after cutting the six disks
+from the puzzle body; it is never stored or animated.
+
 ## Domain invariants
 
 1. States and commands are immutable.

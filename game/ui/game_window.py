@@ -410,7 +410,9 @@ class GameWindow(QMainWindow):
 
 
     def _show_controls(self) -> None:
-        keys = ("Q", "W", "E", "R")[: self.session.puzzle.circle_count]
+        shortcut_circles = get_renderer(self.session.puzzle.puzzle_id).shortcut_circles()
+        key_order = ("Q", "W", "E", "A", "S", "D") if len(shortcut_circles) > 4 else ("Q", "W", "E", "R")
+        keys = key_order[: len(shortcut_circles)]
         shortcut_keys = " / ".join(keys)
         shifted_shortcut_keys = " / ".join(f"Shift+{key}" for key in keys)
         labels = get_renderer(self.session.puzzle.puzzle_id).shortcut_labels()
@@ -438,7 +440,7 @@ class GameWindow(QMainWindow):
             self.tr(
                 "Puzzle World\n\nA desktop collection of colorful mechanical puzzles.\n"
                 "This version includes Looper, Super Looper, Hyper Looper, TriLotica, TriLotica v2, "
-                "Trinita, Trinita v2, Double TriLotica, Triple TriLotica, Lotica, and Lemons."
+                "Trinita, Trinita v2, Double TriLotica, Triple TriLotica, Lotica, Rotator, and Lemons."
             ),
         )
 
