@@ -1,0 +1,1 @@
+"""Pentaxon puzzle family."""

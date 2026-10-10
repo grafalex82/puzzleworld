@@ -82,6 +82,21 @@ def test_hyper_looper_save_round_trip_preserves_compound_piece_positions(tmp_pat
     assert loaded.board == session.board
 
 
+@pytest.mark.parametrize("puzzle_id", ("pentaxon", "tri-pentaxon"))
+def test_pentaxon_save_round_trip_preserves_compound_pieces_and_five_way_orientation(
+    tmp_path, puzzle_id
+):
+    session = GameSession(puzzle_id)
+    session.perform_turn(1)
+    target = tmp_path / f"{puzzle_id}.json"
+
+    save_game(target, GameState.from_snapshot(session.snapshot()))
+    loaded = load_game(target)
+
+    assert loaded.puzzle_id == puzzle_id
+    assert loaded.board == session.board
+
+
 def test_trilotica_save_round_trip_preserves_the_visible_color_arrangement(tmp_path):
     session = GameSession("trilotica")
     session.perform_turn(0)

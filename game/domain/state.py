@@ -26,10 +26,18 @@ class Orientation(str, Enum):
     DOWN = "down"
     ROTATED_120 = "rotated-120"
     ROTATED_240 = "rotated-240"
+    ROTATED_72 = "rotated-72"
+    ROTATED_144 = "rotated-144"
+    ROTATED_216 = "rotated-216"
+    ROTATED_288 = "rotated-288"
 
     def flipped(self) -> Orientation:
         """Return the opposite marker orientation."""
-        return Orientation.DOWN if self is Orientation.UP else Orientation.UP
+        if self is Orientation.UP:
+            return Orientation.DOWN
+        if self is Orientation.DOWN:
+            return Orientation.UP
+        raise ValueError("A non-half-turn orientation cannot be flipped.")
 
     def rotated_third(self, steps: int = 1) -> Orientation:
         """Rotate a three-way orientation by one or more 120-degree steps."""
@@ -42,6 +50,21 @@ class Orientation(str, Enum):
             index = orientations.index(self)
         except ValueError as error:
             raise ValueError("A half-turn orientation cannot rotate by 120 degrees.") from error
+        return orientations[(index + steps) % len(orientations)]
+
+    def rotated_fifth(self, steps: int = 1) -> Orientation:
+        """Rotate a five-way orientation by one or more 72-degree steps."""
+        orientations = (
+            Orientation.UP,
+            Orientation.ROTATED_72,
+            Orientation.ROTATED_144,
+            Orientation.ROTATED_216,
+            Orientation.ROTATED_288,
+        )
+        try:
+            index = orientations.index(self)
+        except ValueError as error:
+            raise ValueError("This orientation cannot rotate by 72 degrees.") from error
         return orientations[(index + steps) % len(orientations)]
 
 
@@ -63,6 +86,12 @@ class Piece:
         if self.orientation is None:
             return self
         return Piece(self.color_id, self.orientation.rotated_third(steps))
+
+    def rotated_fifth(self, steps: int = 1) -> Piece:
+        """Return this piece after a 72-degree rotation, when it is oriented."""
+        if self.orientation is None:
+            return self
+        return Piece(self.color_id, self.orientation.rotated_fifth(steps))
 
 
 @dataclass(frozen=True, slots=True)

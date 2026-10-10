@@ -57,6 +57,27 @@ Lemons has a large disk of diameter 80 and a small right disk of diameter 50. Th
 
 The large disk turns by 90 degrees and cycles each of its five elements through the right, lower, left, and upper group positions. The small disk turns by 60 degrees, cycling its twelve elements in two independent shape-family rings. Pieces have no orientation. A completed puzzle has all twelve yellow pieces in the small disk and a uniform red, green, and blue group in the other three positions, in any order.
 
+## Pentaxon and TriPentaxon rules
+
+Pentaxon has one 72-diameter large disk and two 40-diameter small disks; TriPentaxon
+has three small disks. Each small centre is 24.38 units from the large centre. Five
+copies of the large circle, at 72-degree intervals around every small centre, cut a
+small disk into five outer large triangles, five inner small triangles, and a central
+pentagon. A small disk turns by 72 degrees, cycling the two five-piece triangle rings
+and rotating its two-colour pentagon's five-way orientation.
+
+The large disk carries the portions of every small disk lying inside it: three large
+triangles, four small triangles, and the centre pentagon per small disk. It turns by
+180 degrees in Pentaxon and by 120 degrees in TriPentaxon. The remaining large-disk
+body is the dark-gray renderer-only piece; it rotates during that animation and is
+never stored in board state.
+
+Every small disk consists of one two-colour pentagon, one two-colour triangle of each
+size, two single-colour triangles of each size on either side, and a radial two-colour
+split. A solved board may place complete colour-pair groups in any small disk, but the
+two-colour pieces must agree and the other triangles must occupy their corresponding
+side. Pentaxon uses blue/yellow and red/green; TriPentaxon adds orange/purple.
+
 ## Trinita rules
 
 Trinita has one central disk of diameter 60 and three surrounding disks of diameter

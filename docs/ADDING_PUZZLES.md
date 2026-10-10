@@ -110,7 +110,9 @@ Never update model state from paint or animation code.
    to `_DESCRIPTORS`. The registry drives the puzzle menu, session lookup,
    settings validation, save loading, and renderer selection.
 3. Add the puzzle to `README.md`: a short player-facing description and, when
-   available, a solved screenshot in `docs/screenshots/`.
+   available, a solved screenshot in `docs/screenshots/`. Keep physical dimensions,
+   offsets, and construction constants out of this player-facing copy; document
+   those exact values in `docs/DESIGN.md` instead.
 4. Add its physical rules and logical exceptions to `docs/DESIGN.md`.
 5. If the puzzle needs a color not in `ColorId`, add it deliberately and update
    the shared palette. Do not encode RGB/HEX values in state or JSON.

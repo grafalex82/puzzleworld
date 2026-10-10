@@ -86,6 +86,21 @@ green, and blue groups in any order around the large disk.
 
 ![Solved Lemons puzzle](docs/screenshots/lemons.png)
 
+### Pentaxon and TriPentaxon
+
+Pentaxon has two five-sector small disks and a large disk that turns by 180
+degrees. TriPentaxon adds a third small disk and turns the large disk by 120
+degrees. Small disks always turn by 72 degrees. Reassemble the blue/yellow and
+red/green groups in Pentaxon; TriPentaxon also uses an orange/purple group.
+
+#### Pentaxon
+
+![Solved Pentaxon puzzle](docs/screenshots/pentaxon.png)
+
+#### TriPentaxon
+
+![Solved TriPentaxon puzzle](docs/screenshots/tri-pentaxon.png)
+
 ## Install
 
 ```text

@@ -14,6 +14,8 @@ from game.puzzles.looper.model import LooperPuzzle
 from game.puzzles.looper.renderer import LooperRenderer
 from game.puzzles.lotica.model import LoticaPuzzle
 from game.puzzles.lotica.renderer import LoticaRenderer
+from game.puzzles.pentaxon.model import PentaxonPuzzle, TriPentaxonPuzzle
+from game.puzzles.pentaxon.renderer import PentaxonRenderer, TriPentaxonRenderer
 from game.puzzles.rotator.model import RotatorPuzzle
 from game.puzzles.rotator.renderer import RotatorRenderer
 from game.puzzles.super_looper.model import SuperLooperPuzzle
@@ -55,6 +57,10 @@ _DESCRIPTORS = (
     PuzzleDescriptor("trinita", "Trinita", TrinitaPuzzle(), TrinitaRenderer()),
     PuzzleDescriptor("trinita-v2", "Trinita v2", TrinitaV2Puzzle(), TrinitaV2Renderer()),
     PuzzleDescriptor("lemons", "Lemons", LemonsPuzzle(), LemonsRenderer()),
+    PuzzleDescriptor("pentaxon", "Pentaxon", PentaxonPuzzle(), PentaxonRenderer()),
+    PuzzleDescriptor(
+        "tri-pentaxon", "TriPentaxon", TriPentaxonPuzzle(), TriPentaxonRenderer()
+    ),
 )
 
 
