@@ -10,6 +10,8 @@ from game.puzzles.avenger.model import AvengerPuzzle
 from game.puzzles.avenger.renderer import AvengerRenderer
 from game.puzzles.hyper_looper.model import HyperLooperPuzzle
 from game.puzzles.hyper_looper.renderer import HyperLooperRenderer
+from game.puzzles.hex_shaper.model import HexShaperPuzzle
+from game.puzzles.hex_shaper.renderer import HexShaperRenderer
 from game.puzzles.lemons.model import LemonsPuzzle
 from game.puzzles.lemons.renderer import LemonsRenderer
 from game.puzzles.looper.model import LooperPuzzle
@@ -47,6 +49,7 @@ _DESCRIPTORS = (
     PuzzleDescriptor("looper", "Looper", LooperPuzzle(), LooperRenderer()),
     PuzzleDescriptor("super-looper", "Super Looper", SuperLooperPuzzle(), SuperLooperRenderer()),
     PuzzleDescriptor("hyper-looper", "Hyper Looper", HyperLooperPuzzle(), HyperLooperRenderer()),
+    PuzzleDescriptor("hex-shaper", "Hex Shaper", HexShaperPuzzle(), HexShaperRenderer()),
     PuzzleDescriptor("trilotica", "TriLotica", TriLoticaPuzzle(), TriLoticaRenderer()),
     PuzzleDescriptor(
         "double-trilotica", "Double TriLotica", DoubleTriLoticaPuzzle(), DoubleTriLoticaRenderer()

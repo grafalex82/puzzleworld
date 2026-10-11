@@ -12,6 +12,15 @@ orientation. The red and green six-sided centres are decorative.
 
 ![Solved Avenger puzzle](docs/screenshots/avenger.png)
 
+### Hex Shaper
+
+Three equal disks turn in 60-degree steps. Restore blue at the top, green at
+the lower left, and red at the lower right; their pairwise intersections are
+teal, purple, and yellow, with a white central triangle. The three coloured
+six-sided centres are decorative.
+
+![Solved Hex Shaper puzzle](docs/screenshots/hex-shaper.png)
+
 ### Looper
 
 Three overlapping circles containing lens and vertical elements. A turn rotates the five elements inside one circle by 180 degrees.
@@ -140,6 +149,7 @@ game/
 ├── domain/                 Shared immutable domain values and rule protocols
 ├── puzzles/
 │   ├── avenger/            Two equal six-step disks and their shared elements
+│   ├── hex_shaper/         Three equal six-step disks and their shared elements
 │   ├── looper/             Looper model and its independent Qt renderer
 │   ├── super_looper/       Super Looper model and its independent Qt renderer
 │   ├── hyper_looper/       Hyper Looper model and its independent Qt renderer

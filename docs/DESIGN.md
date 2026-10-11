@@ -26,6 +26,22 @@ cycles, so its pieces transfer correctly between the disks. The reference finish
 puts red in the left-only area, green in the right-only area, and yellow in the
 shared segment. Pieces of the same shape and color are interchangeable.
 
+## Hex Shaper rules
+
+Hex Shaper uses the same 60-diameter, 42-unit-offset, six-cut construction as
+Avenger, with three disks placed at the vertices of an equilateral triangle.
+Every disk turns by 60 degrees and advances its twelve alternating ring
+positions by two. The top disk is blue, the lower-left disk green, and the
+lower-right disk red. Their pairwise two-piece bridge groups are teal, purple,
+and yellow; the remaining central triangle is a single white piece shared by
+all three turn cycles.
+
+The three coloured six-sided centres are decorative rather than model pieces.
+They are drawn within the active disk's transformed and clipped animation
+layer. Triangles and lenses have no orientation. The solved state is the exact
+reference colouring from the shown arrangement; same-shape, same-colour pieces
+are interchangeable by their value representation.
+
 ## Looper rules
 
 Looper has nine colored positions arranged from left to right. Even positions contain five small lens/diamond pieces with an up/down marker. Odd positions contain four large vertical pieces without orientation. The solved colors are paired from left to right: red, orange, yellow, green, and blue, with the two outer colors represented by only one of the two piece kinds.
