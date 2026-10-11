@@ -1,0 +1,1 @@
+"""Avenger puzzle family."""

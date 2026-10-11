@@ -10,6 +10,22 @@
 - **Scramble**: a reproducible scenario that applies generated turns without adding them to user history, then starts a solving game.
 - **Transition**: the immutable before/after pair returned by the session for UI animation. Animation never drives domain state.
 
+## Avenger rules
+
+Avenger has two equal turnable disks, each 60 units in diameter, whose centres
+are 42 units apart. Six copies of the opposing disk, placed at 60-degree
+intervals around a disk centre, cut each disk into a six-sided centre, six
+curved rectangular lenses, and six curved triangles. The opposing disks share
+one lens and its two neighbouring triangles, yielding 21 physical ring pieces.
+
+Each disk turns by 60 degrees. Its twelve alternating ring positions advance
+two places. The central six-sided shapes are red/green decorative artwork, not
+model pieces; they rotate in the same clipped painter layer as their disk during
+an animation. The shared triangle/lens/triangle segment is included in both turn
+cycles, so its pieces transfer correctly between the disks. The reference finish
+puts red in the left-only area, green in the right-only area, and yellow in the
+shared segment. Pieces of the same shape and color are interchangeable.
+
 ## Looper rules
 
 Looper has nine colored positions arranged from left to right. Even positions contain five small lens/diamond pieces with an up/down marker. Odd positions contain four large vertical pieces without orientation. The solved colors are paired from left to right: red, orange, yellow, green, and blue, with the two outer colors represented by only one of the two piece kinds.

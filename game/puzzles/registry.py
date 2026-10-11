@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 
 from game.domain.rules import PuzzleDefinition
 from game.puzzles.base import PuzzleDescriptor
+from game.puzzles.avenger.model import AvengerPuzzle
+from game.puzzles.avenger.renderer import AvengerRenderer
 from game.puzzles.hyper_looper.model import HyperLooperPuzzle
 from game.puzzles.hyper_looper.renderer import HyperLooperRenderer
 from game.puzzles.lemons.model import LemonsPuzzle
@@ -41,6 +43,7 @@ if TYPE_CHECKING:
     from game.ui.renderer import PuzzleRenderer
 
 _DESCRIPTORS = (
+    PuzzleDescriptor("avenger", "Avenger", AvengerPuzzle(), AvengerRenderer()),
     PuzzleDescriptor("looper", "Looper", LooperPuzzle(), LooperRenderer()),
     PuzzleDescriptor("super-looper", "Super Looper", SuperLooperPuzzle(), SuperLooperRenderer()),
     PuzzleDescriptor("hyper-looper", "Hyper Looper", HyperLooperPuzzle(), HyperLooperRenderer()),

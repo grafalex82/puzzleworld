@@ -4,6 +4,14 @@ Puzzle World is a desktop application for playing a growing collection of flat m
 
 ## Puzzles
 
+### Avenger
+
+Two equal disks turn in 60-degree steps. Restore red on the left, green on the
+right, and yellow in their shared lens; triangles and curved lenses have no
+orientation. The red and green six-sided centres are decorative.
+
+![Solved Avenger puzzle](docs/screenshots/avenger.png)
+
 ### Looper
 
 Three overlapping circles containing lens and vertical elements. A turn rotates the five elements inside one circle by 180 degrees.
@@ -131,6 +139,7 @@ docs/                       Design rules, puzzle-extension guide, and save forma
 game/
 ├── domain/                 Shared immutable domain values and rule protocols
 ├── puzzles/
+│   ├── avenger/            Two equal six-step disks and their shared elements
 │   ├── looper/             Looper model and its independent Qt renderer
 │   ├── super_looper/       Super Looper model and its independent Qt renderer
 │   ├── hyper_looper/       Hyper Looper model and its independent Qt renderer
