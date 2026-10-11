@@ -87,6 +87,15 @@ Two circles one radius apart: the left disk cycles four lenses and four curved t
 
 ![Solved Lotica puzzle](docs/screenshots/lotica.png)
 
+### Mandorla
+
+Two equal disks one radius apart turn in 120-degree steps. Restore red on the
+left, green on the right, and yellow in the five-piece shared mandorla; the
+red/green mirror assembly is also a solution. Lenses and curved rhombi of the
+same colour are interchangeable.
+
+![Solved Mandorla puzzle](docs/screenshots/mandorla.png)
+
 ### Rotator
 
 Six disks sit around a fixed white hexagon. Each 120-degree turn cycles
