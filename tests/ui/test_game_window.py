@@ -4,7 +4,7 @@ from dataclasses import replace
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 from PyQt6.QtTest import QTest
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QMenu
 
 from game.application.session import GameSession
 from game.persistence.settings import AppSettings
@@ -74,4 +74,23 @@ def test_hyper_looper_menu_action_is_enabled_after_ui_refresh():
 
     hyper_action = next(action for action, puzzle_id in window.puzzle_actions.items() if puzzle_id == "hyper-looper")
     assert hyper_action.isEnabled()
+    window.close()
+
+
+def test_cohan_circle_variants_appear_in_one_puzzle_type_submenu():
+    window = GameWindow(GameSession())
+
+    puzzle_menu = next(menu for menu in window.menuBar().findChildren(QMenu) if menu.title() == "&Puzzle")
+    puzzle_type_menu = next(menu for menu in puzzle_menu.findChildren(QMenu) if menu.title() == "Puzzle type")
+    cohan_menus = [
+        menu for menu in puzzle_type_menu.findChildren(QMenu) if menu.title() == "Cohan Circle"
+    ]
+
+    assert len(cohan_menus) == 1
+    assert [action.text() for action in cohan_menus[0].actions()] == [
+        "Version 1",
+        "Version 2",
+        "Version 3",
+        "Version 4",
+    ]
     window.close()

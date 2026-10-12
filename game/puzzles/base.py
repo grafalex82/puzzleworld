@@ -17,3 +17,5 @@ class PuzzleDescriptor:
     display_name: str
     definition: PuzzleDefinition
     renderer: PuzzleRenderer
+    # A non-empty value nests the entry below that submenu in Puzzle type.
+    menu_group: str | None = None

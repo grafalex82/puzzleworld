@@ -8,6 +8,8 @@ from game.domain.rules import PuzzleDefinition
 from game.puzzles.base import PuzzleDescriptor
 from game.puzzles.avenger.model import AvengerPuzzle
 from game.puzzles.avenger.renderer import AvengerRenderer
+from game.puzzles.cohan_circle.model import CohanCirclePuzzle
+from game.puzzles.cohan_circle.renderer import CohanCircleRenderer
 from game.puzzles.hyper_looper.model import HyperLooperPuzzle
 from game.puzzles.hyper_looper.renderer import HyperLooperRenderer
 from game.puzzles.hex_shaper.model import HexShaperPuzzle
@@ -48,6 +50,18 @@ if TYPE_CHECKING:
 
 _DESCRIPTORS = (
     PuzzleDescriptor("avenger", "Avenger", AvengerPuzzle(), AvengerRenderer()),
+    PuzzleDescriptor(
+        "cohan-circle-v1", "Version 1", CohanCirclePuzzle(1), CohanCircleRenderer(), "Cohan Circle"
+    ),
+    PuzzleDescriptor(
+        "cohan-circle-v2", "Version 2", CohanCirclePuzzle(2), CohanCircleRenderer(), "Cohan Circle"
+    ),
+    PuzzleDescriptor(
+        "cohan-circle-v3", "Version 3", CohanCirclePuzzle(), CohanCircleRenderer(), "Cohan Circle"
+    ),
+    PuzzleDescriptor(
+        "cohan-circle-v4", "Version 4", CohanCirclePuzzle(4), CohanCircleRenderer(), "Cohan Circle"
+    ),
     PuzzleDescriptor("looper", "Looper", LooperPuzzle(), LooperRenderer()),
     PuzzleDescriptor("super-looper", "Super Looper", SuperLooperPuzzle(), SuperLooperRenderer()),
     PuzzleDescriptor("hyper-looper", "Hyper Looper", HyperLooperPuzzle(), HyperLooperRenderer()),
@@ -71,7 +85,6 @@ _DESCRIPTORS = (
         "tri-pentaxon", "TriPentaxon", TriPentaxonPuzzle(), TriPentaxonRenderer()
     ),
 )
-
 
 def available_puzzles() -> tuple[PuzzleDescriptor, ...]:
     return _DESCRIPTORS

@@ -96,6 +96,16 @@ same colour are interchangeable.
 
 ![Solved Mandorla puzzle](docs/screenshots/mandorla.png)
 
+### Cohan Circle
+
+Cohan Circle completes Mandorla's construction to 60-degree turns. Each former
+curved rhombus is split into a petal and two concave triangles. Its Puzzle type
+submenu offers four colour challenges: Mandorla colours; dark pieces with yellow
+and blue perimeter lenses; the classic red/green/blue layout with dark-gray
+triangles; and five blue/green/yellow/orange/red zones.
+
+![Solved Cohan Circle puzzle](docs/screenshots/cohan-circle.png)
+
 ### Rotator
 
 Six disks sit around a fixed white hexagon. Each 120-degree turn cycles
@@ -158,6 +168,7 @@ game/
 ├── domain/                 Shared immutable domain values and rule protocols
 ├── puzzles/
 │   ├── avenger/            Two equal six-step disks and their shared elements
+│   ├── cohan_circle/        Cohan Circle model and its independent Qt renderer
 │   ├── hex_shaper/         Three equal six-step disks and their shared elements
 │   ├── looper/             Looper model and its independent Qt renderer
 │   ├── super_looper/       Super Looper model and its independent Qt renderer

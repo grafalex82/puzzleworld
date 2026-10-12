@@ -149,6 +149,7 @@ class GameWindow(QMainWindow):
         variants_menu = puzzle_menu.addMenu(self.tr("Puzzle type"))
         variants = QActionGroup(self)
         variants.setExclusive(True)
+        grouped_menus = {}
         for descriptor in available_puzzles():
             action = QAction(descriptor.display_name, self)
             action.setCheckable(True)
@@ -158,7 +159,13 @@ class GameWindow(QMainWindow):
                 lambda checked=False, puzzle_id=descriptor.puzzle_id: self._select_puzzle(puzzle_id)
             )
             variants.addAction(action)
-            variants_menu.addAction(action)
+            target_menu = variants_menu
+            if descriptor.menu_group is not None:
+                target_menu = grouped_menus.get(descriptor.menu_group)
+                if target_menu is None:
+                    target_menu = variants_menu.addMenu(self.tr(descriptor.menu_group))
+                    grouped_menus[descriptor.menu_group] = target_menu
+            target_menu.addAction(action)
             self.puzzle_actions[action] = descriptor.puzzle_id
 
         help_menu = self.menuBar().addMenu(self.tr("&Help"))

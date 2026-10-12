@@ -82,6 +82,23 @@ three lens/lens/lens/rhombus groups. Pieces have no orientation. A completed
 board has yellow in the shared mandorla and either red-left/green-right or its
 green-left/red-right mirror.
 
+## Cohan Circle rules
+
+Cohan Circle completes Mandorla's three-fold construction to six-fold symmetry.
+Each disk turns by 60 degrees and carries twelve petals and six concave
+triangles. Each Mandorla rhombus becomes one additional petal between two
+triangles, producing 19 physical petals and 10 physical triangles across the
+two overlapping disks. The two rings share five petals and two triangles.
+
+Cohan Circle has four selectable colour schemes. Version 1 uses Mandorla's
+red-left/green-right/yellow-overlap finish (and its red/green mirror). Version 2
+uses dark-gray pieces with yellow lenses at the left perimeter and blue lenses at
+the right perimeter. Version 3 has red and green outer petals, blue spokes, a
+white central petal, and dark-gray triangles (and accepts the red/green mirror).
+Version 4 uses five vertical zones: blue, green, yellow, orange, and red.
+Pieces have no orientation, and each turn advances its eighteen-slot ring by
+three positions.
+
 ## TriLotica v2 rules
 
 TriLotica v2 has two equal turnable disks whose centres, and whose three left-disk auxiliary-circle centres, are `50/60 R` from the left centre. Their common intersection is an added central triangle. The two auxiliary circles on either side of the right centre form one of three large truncated lenses carried by the left disk; each is cut out of a large triangle. The three ordinary lenses, three large truncated lenses, and three cut-out triangles each cycle by 120 degrees with the left disk. The right half-turn swaps its two lenses and triangle with their three opposing slots, and also carries the central left triangle into its green partner on the right.
