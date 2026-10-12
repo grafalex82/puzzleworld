@@ -24,6 +24,8 @@ from game.puzzles.mandorla.model import MandorlaPuzzle
 from game.puzzles.mandorla.renderer import MandorlaRenderer
 from game.puzzles.pentaxon.model import PentaxonPuzzle, TriPentaxonPuzzle
 from game.puzzles.pentaxon.renderer import PentaxonRenderer, TriPentaxonRenderer
+from game.puzzles.planet_copter.model import PlanetCopterPuzzle
+from game.puzzles.planet_copter.renderer import PlanetCopterRenderer
 from game.puzzles.rotator.model import RotatorPuzzle
 from game.puzzles.rotator.renderer import RotatorRenderer
 from game.puzzles.super_looper.model import SuperLooperPuzzle
@@ -66,6 +68,7 @@ _DESCRIPTORS = (
     PuzzleDescriptor("super-looper", "Super Looper", SuperLooperPuzzle(), SuperLooperRenderer()),
     PuzzleDescriptor("hyper-looper", "Hyper Looper", HyperLooperPuzzle(), HyperLooperRenderer()),
     PuzzleDescriptor("hex-shaper", "Hex Shaper", HexShaperPuzzle(), HexShaperRenderer()),
+    PuzzleDescriptor("planet-copter", "Planet Copter", PlanetCopterPuzzle(), PlanetCopterRenderer()),
     PuzzleDescriptor("trilotica", "TriLotica", TriLoticaPuzzle(), TriLoticaRenderer()),
     PuzzleDescriptor(
         "double-trilotica", "Double TriLotica", DoubleTriLoticaPuzzle(), DoubleTriLoticaRenderer()

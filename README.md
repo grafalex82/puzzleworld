@@ -21,6 +21,16 @@ six-sided centres are decorative.
 
 ![Solved Hex Shaper puzzle](docs/screenshots/hex-shaper.png)
 
+### Planet Copter
+
+Three equal circles sit at the vertices of an equilateral triangle and turn by
+180 degrees. Reassemble the three pairwise lenses around the white shared
+triangle, then exchange each inner set with its matching three outer elements.
+The blue, green, and red disk centres are decorative and rotate only as part of
+the animation.
+
+![Solved Planet Copter puzzle](docs/screenshots/planet-copter.png)
+
 ### Looper
 
 Three overlapping circles containing lens and vertical elements. A turn rotates the five elements inside one circle by 180 degrees.
@@ -170,6 +180,7 @@ game/
 │   ├── avenger/            Two equal six-step disks and their shared elements
 │   ├── cohan_circle/        Cohan Circle model and its independent Qt renderer
 │   ├── hex_shaper/         Three equal six-step disks and their shared elements
+│   ├── planet_copter/      Three equal half-turn disks and their shared elements
 │   ├── looper/             Looper model and its independent Qt renderer
 │   ├── super_looper/       Super Looper model and its independent Qt renderer
 │   ├── hyper_looper/       Hyper Looper model and its independent Qt renderer

@@ -103,6 +103,20 @@ three positions.
 
 TriLotica v2 has two equal turnable disks whose centres, and whose three left-disk auxiliary-circle centres, are `50/60 R` from the left centre. Their common intersection is an added central triangle. The two auxiliary circles on either side of the right centre form one of three large truncated lenses carried by the left disk; each is cut out of a large triangle. The three ordinary lenses, three large truncated lenses, and three cut-out triangles each cycle by 120 degrees with the left disk. The right half-turn swaps its two lenses and triangle with their three opposing slots, and also carries the central left triangle into its green partner on the right.
 
+## Planet Copter rules
+
+Planet Copter has three equal disks with centres at the vertices of an
+equilateral triangle whose side is `1.2 R`, where `R` is the disk radius. Every
+disk turns by 180 degrees. The intersection of all three disks is a single
+triangle. Each pairwise intersection, with that triangle removed, is one lens.
+
+The white triangle and the teal, purple, and yellow inner lenses are persisted,
+as are a triangle and two lenses at the outer, half-turn counterpart of every
+disk. A half-turn exchanges each inner triangle/lens/lens set with its three
+outer positions. The remaining central part of each disk is navy, green, or
+red renderer-only decoration; it is not stored in the model, but rotates in the
+active disk's animation.
+
 ## Double TriLotica and Triple TriLotica rules
 
 Double TriLotica adds two of TriLotica's right disks around the same central disk,
